@@ -6,5 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'game_id',
+        'name',
+        'is_imposter',
+        'points',
+        'is_ai'
+    ];
+
+    public function game()
+    {
+        return $this->belongsTo(Game::class);
+    }
+
+    // If you want to see which votes the player cast
+    public function votesCast()
+    {
+        return $this->hasMany(Vote::class, 'voter_id');
+    }
+
+    // Votes where this player is the suspect
+    public function votesAgainst()
+    {
+        return $this->hasMany(Vote::class, 'suspect_id');
+    }
+
 }
