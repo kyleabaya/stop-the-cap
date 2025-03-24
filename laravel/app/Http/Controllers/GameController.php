@@ -5,10 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Player;
 use App\Models\Round;
+use App\Models\Game;
+use Illuminate\Support\Str;
+
 
 class GameController extends Controller
 
 {
+
+     public function latest()
+     {
+         $latestGame = Game::latest()->first();
+         return response()->json(['code' => $latestGame ? $latestGame->code : null]);
+     }
+ 
+     // Generates and store a new game code
+     public function create()
+     {
+         // Generate a random 6-character alphanumeric code
+         $newCode = strtoupper(Str::random(6));
+ 
+         // Store the new game code
+         $game = Game::create(['code' => $newCode]);
+ 
+         return response()->json(['code' => $game->code]);
+     }
     // Handle updating the points
     public function awardPoints(Request $request)
     {

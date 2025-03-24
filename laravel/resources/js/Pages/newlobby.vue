@@ -1,48 +1,51 @@
-<template>
-    <div class="lobby-page">
-        <h1>Lobby</h1>
-        <div class="players-list">
-            <h2>Players in Lobby:</h2>
-            <ul>
-                <li v-for="player in players" :key="player.id">
-                    {{ player.name }}
-                </li>
-            </ul>
-        </div>
-        <button @click="startGame" class="start-button">Start Game</button>
+
+    <template>
+    <div class="joinlobby-page m-20">
+        <h1 class = "text-6xl">Code to Join:</h1>
+    <div v-if="gameCode" class="text-xl font-mono bg-gray-200 p-4 rounded">
+      Current Game Code: <strong>{{ gameCode }}</strong>
     </div>
+    <p v-else class="text-gray-500">No active lobby. Start a new one!</p>
+    
+        <div class="players-list">
+
+        <h2 class = "text-xl">Players in Lobby:</h2>
+          </div>
+        <button @click="startGame" class="w-full mb-2 start-button px-6 py-3 text-2xl bg-green-400 text-white rounded-lg hover:bg-green-800 ">Start Game</button>
+        </div>
 </template>
 
 <script>
+import axios from "axios";
+import { ref, onMounted } from "vue";
+
 export default {
-    data() {
-        return {
-            players: [
-                // Example players, replace with dynamic data
-                { id: 1, name: "Player 1" },
-                { id: 2, name: "Player 2" },
-            ],
-        };
-    },
-    methods: {
-        startGame() {
-            // Logic to start the game
-            console.log("Game started!");
-        },
-    },
-};
+  setup() {
+    const gameCode = ref(null);
+
+    // Fetch the latest game code from the database
+    const fetchLatestGame = async () => {
+      try {
+        const response = await axios.get("/api/latest-game");
+        gameCode.value = response.data.code;
+      } catch (error) {
+        console.error("Error fetching latest game:", error);
+      }
+    }
+
+    // Create a new game lobby and get a new code
+    const generateNewGame = async () => {
+      try {
+        const response = await axios.post("/api/new-game");
+        gameCode.value = response.data.code; // Update UI with new code
+      } catch (error) {
+        console.error("Error generating new game:", error);
+      }
+    }  // Fetch latest game when the component mounts
+    onMounted(fetchLatestGame);
+
+    return { gameCode, generateNewGame };
+  }
+}
+
 </script>
-
-<style scoped>
-.lobby-page {
-    text-align: center;
-    padding: 20px;
-}
-
-.players-list {
-    margin: 20px 0;
-}
-
-.start-button {
-    margin: auto;
-}
