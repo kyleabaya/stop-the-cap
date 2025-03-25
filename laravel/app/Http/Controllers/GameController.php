@@ -23,11 +23,16 @@ class GameController extends Controller
      public function create()
      {
          // Generate a random 6-character alphanumeric code
-         $newCode = strtoupper(Str::random(6));
+         $code = strtoupper(Str::random(6));
  
          // Store the new game code
-         $game = Game::create(['code' => $newCode]);
- 
+
+         $game = Game::create([
+            'code' => $code,
+            'imposters_remaining' => 4, 
+            'status' => 'waiting',
+        ]);
+
          return response()->json(['code' => $game->code]);
      }
     // Handle updating the points
@@ -62,7 +67,6 @@ class GameController extends Controller
 
     //Handle states within the rounds.
     //first from The question, giving a response, chatbox, voting, then next round.
-
 
     public function startState($gameId)
     {
