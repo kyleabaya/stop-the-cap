@@ -28,18 +28,25 @@ function handleImageError() {
 
 <template>
     <Head title="Welcome to the Game" />
-    <div class="from-pink-100 text-black dark:text-white/50">
-        <img
+    <div class="text-black dark:text-white/50 bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover">
+        <!-- <img
             id="background"
-            class="from-pink-100"
-            src="stop-the-cap/laravel/public/build/assets/white-abstract-background_23-2148810113.avif"
-        />
+            src="https://static.vecteezy.com/system/resources/previews/008/058/831/non_2x/a-simple-modern-abstract-design-a-beautiful-soft-off-white-element-twisting-and-flowing-on-a-beige-background-illustration-vector.jpg"
+        /> -->
+        <!-- More options for images  
+         https://img.freepik.com/premium-photo/gaming-geometry-button-icon-floating-background-3d-illustration-rendering-abstract-wallpaper-gamer_42100-4243.jpg
+         https://png.pngtree.com/thumb_back/fh260/background/20191029/pngtree-abstract-blue-background-with-white-dots-image_320887.jpg 
+         https://wallpapers.com/images/hd/simple-background-nfe3kq9cr13oqs3l.jpg  
+         https://i.pinimg.com/736x/ea/89/5f/ea895f26200ae65449b4d3a1b5851d20.jpg
+
+         -->
+
         <div
             class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
         >
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+            <div class="relative w-full px-6 lg:max-w-7xl">
                 <header
-                    class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3 text-3xl font-bold"
+                    class="grid grid-cols-2 items-center gap-4 py-16 lg:grid-cols-3 text-3xl font-bold"
                 > Welcome to Stop The Cap!
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link
@@ -123,7 +130,9 @@ function handleImageError() {
                                 />
                             </svg>
                         </a>
-
+                <a href="/Help"
+                class="flex items-start rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+                >
                         <div
                             class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
                         >
@@ -133,24 +142,17 @@ function handleImageError() {
                                     class="text-xl font-semibold text-black dark:text-white">
                                     Help
                                 </h2>
-
-                                <p class="mt-4 text-sm/relaxed">
-                                    Help and Information about how to play
-                                    <a
-                                        href="https://laravel.com/docs/telescope"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
-                                        >Telescope</a
-                                    >, and more.
-                                </p>
+                                <p>Click here for the rules of the game</p>
                             </div>
                         </div>
+                    </a>
                     </div>
                 </main>
 
                 <footer
                     class="py-16 text-center text-sm text-black dark:text-white/70"
                 >
-                    Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
+                    Created by Maya Laidler and Kyle Abaya
                 </footer>
             </div>
         </div>

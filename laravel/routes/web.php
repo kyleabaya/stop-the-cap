@@ -24,6 +24,10 @@ Route::get('/joinlobby', function () {
     return Inertia::render('joinlobby');
 });
 
+Route::get('/Help', function () {
+    return Inertia::render('Help');
+});
+
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

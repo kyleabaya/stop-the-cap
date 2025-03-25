@@ -7,6 +7,14 @@
           {{ gameCode }}
         </div>
         <p v-else class="text-gray-500">No active lobby. Start a new one!</p>
+        <div>
+            <label for="username" class="block mb-4 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+            <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-800 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-pink-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="nickname" required />
+        </div>
+        <div>
+            <label for="gamecode" class="block mb-6 text-sm font-medium text-gray-900 dark:text-white">Game Code</label>
+            <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-800 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-pink-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+        </div>
   
         <div class="mt-6">
           <h2 class="text-lg font-semibold text-gray-700">Players in Lobby:</h2>
