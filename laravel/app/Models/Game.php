@@ -15,7 +15,6 @@ class Game extends Model
         'status',
     ];
 
-    // Relationships
     public function players()
     {
         return $this->hasMany(Player::class);
