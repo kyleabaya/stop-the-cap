@@ -1,5 +1,7 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import laravel from 'laravel-vite-plugin';
+import vue from '@vitejs/plugin-vue';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -8,6 +10,7 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
+        './resources/js/**/*.js'
     ],
 
     theme: {

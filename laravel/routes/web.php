@@ -12,6 +12,20 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+
+});
+
+Route::get('/newlobby', function () {
+    return Inertia::render('newlobby');
+});
+
+
+Route::get('/joinlobby', function () {
+    return Inertia::render('joinlobby');
+});
+
+Route::get('/Help', function () {
+    return Inertia::render('Help');
 });
 
 Route::get('/dashboard', function () {

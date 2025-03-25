@@ -5,10 +5,36 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Player;
 use App\Models\Round;
+use App\Models\Game;
+use Illuminate\Support\Str;
+
 
 class GameController extends Controller
 
 {
+
+     public function latest()
+     {
+         $latestGame = Game::latest()->first();
+         return response()->json(['code' => $latestGame ? $latestGame->code : null]);
+     }
+ 
+     // Generates and store a new game code
+     public function create()
+     {
+         // Generate a random 6-character alphanumeric code
+         $code = strtoupper(Str::random(6));
+ 
+         // Store the new game code
+
+         $game = Game::create([
+            'code' => $code,
+            'imposters_remaining' => 4, 
+            'status' => 'waiting',
+        ]);
+
+         return response()->json(['code' => $game->code]);
+     }
     // Handle updating the points
     public function awardPoints(Request $request)
     {
@@ -41,7 +67,6 @@ class GameController extends Controller
 
     //Handle states within the rounds.
     //first from The question, giving a response, chatbox, voting, then next round.
-
 
     public function startState($gameId)
     {
