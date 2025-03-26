@@ -38,7 +38,6 @@ function handleImageError() {
          https://png.pngtree.com/thumb_back/fh260/background/20191029/pngtree-abstract-blue-background-with-white-dots-image_320887.jpg 
          https://wallpapers.com/images/hd/simple-background-nfe3kq9cr13oqs3l.jpg  
          https://i.pinimg.com/736x/ea/89/5f/ea895f26200ae65449b4d3a1b5851d20.jpg
-
          -->
 
         <div
@@ -46,7 +45,7 @@ function handleImageError() {
         >
             <div class="relative w-full px-6 lg:max-w-7xl">
                 <header
-                    class="grid grid-cols-2 items-center gap-4 py-16 lg:grid-cols-3 text-3xl font-bold"
+                    class="grid grid-cols-2 items-center gap-0 py-16 text-3xl font-bold"
                 > Welcome to Stop The Cap!
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link
@@ -133,9 +132,7 @@ function handleImageError() {
                 <a href="/Help"
                 class="flex items-start rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
                 >
-                        <div
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
-                        >
+        
 
                             <div class="pt-3 sm:pt-5">
                                 <h2
@@ -143,7 +140,7 @@ function handleImageError() {
                                     Help
                                 </h2>
                                 <p>Click here for the rules of the game</p>
-                            </div>
+
                         </div>
                     </a>
                     </div>

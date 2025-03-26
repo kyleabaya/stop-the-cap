@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\messages;
 
 class Game extends Model
 {
@@ -28,7 +29,7 @@ class Game extends Model
 
     public function messages()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(messages::class);
     }
 
     // Example method to check if game is finished

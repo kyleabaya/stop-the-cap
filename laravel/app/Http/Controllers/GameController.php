@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class GameController extends Controller
 
 {
-
+    //for /latest-game
      public function latest()
      {
          $latestGame = Game::latest()->first();

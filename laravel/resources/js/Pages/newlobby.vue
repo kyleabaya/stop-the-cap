@@ -1,23 +1,25 @@
 <template>
     <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
-        <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
+        <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center text-2xl font-bold">
         <h2 class = "text-3xl">Code to join the lobby:</h2>
+            {{gameCode}}
         
-        <div class="players-list">
+        <div class="players-list"></div>
             <h2 class = "text-xl">Players in Lobby:</h2>
             <ul>
                 <li v-for="player in players" :key="player.id">
                     {{player.name}}
                 </li>
             </ul>
-        </div> 
+        
         <button 
           @click="startGame"
-          class="mt-6 w-full px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
           Start Game
         </button>
     </div>
-</div>
+    
+    </div> 
 </template>
 
 <script>
@@ -42,10 +44,10 @@ export default {
 
     // Function to start the game
     const startGame = () => {
-      console.log("Game started!");
+      axios.post("/api/start-game");
     };
 
-    // Run fetchPlayers() after component loads
+    // run fetchPlayers() after component loads
     onMounted(fetchPlayers);
 
     return { gameCode, players, startGame };
