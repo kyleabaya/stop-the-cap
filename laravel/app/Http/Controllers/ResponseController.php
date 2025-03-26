@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Response;
+use App\Models\Round;
+
+class ResponseController extends Controller
+{
+    public function store(Round $round, Request $request){
+        $request->validate(['player_id'=> 'required|exists:player, id', 'raised_hand' => 'required|boolean',]);
+
+        if ($rounds->status !== 'in_progress'){
+            return response()->json((['error' => 'Rounds is not in progress']));
+        }
+        $response = Response::create(['round_id'=> $round->id,'player_id'=> $request->player_id,'raised_hand'=> $request->raised_hand,]);
+        
+        return response()->json($response);
+    }
+}
