@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Models\Player;
+use App\Models\Game;
+use Illuminate\Support\Facades\Response;
 
 use Illuminate\Http\Request;
 
@@ -10,7 +12,39 @@ class PlayerController extends Controller
     //
     public function getPlayers($gameCode)
     {
-        $players = Player::where('game_code', $gameCode)->get();
+        $players = Player::where('game_id', $gameCode)->get();
         return response()->json($players);
     }
+
+    public function join(Request $request)
+    {
+        // Validate the incoming request
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => 'required|string',
+        ]);
+
+    // check if the game exists with the given code
+    $game = Game::where('code', $validated['code'])->first();
+
+    if (!$game) {
+        return response()->json(['error' => 'Game not found'], 404);
+    }
+
+    if ($game->status !== 'waiting') {
+            return response()->json(['error' => 'Game has already started'], 400);
+        }
+    
+    // create the player in the table
+        $player = Player::create([
+            'game_id' => $game->id,
+            'name' => $request->input('name', 'Anonymous'),
+            'is_imposter' => false,
+            'points' => 0,
+            'is_ai' => false,
+        ]);
+
+        return response()->json($player, 201);
+    }
+
 }
