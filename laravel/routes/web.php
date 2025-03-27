@@ -19,7 +19,6 @@ Route::get('/newlobby', function () {
     return Inertia::render('newlobby');
 });
 
-
 Route::get('/joinlobby', function () {
     return Inertia::render('joinlobby');
 });
