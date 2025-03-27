@@ -7,6 +7,7 @@ use App\Models\Player;
 use App\Models\Round;
 use App\Models\Game;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 
 class GameController extends Controller
@@ -22,18 +23,19 @@ class GameController extends Controller
      // Generates and store a new game code
      public function create()
      {
-         // Generate a random 6-character alphanumeric code
-         $code = strtoupper(Str::random(6));
- 
-         // Store the new game code
-
-         $game = Game::create([
-            'code' => $code,
-            'imposters_remaining' => 4, 
-            'status' => 'waiting',
-        ]);
-
-         return response()->json(['code' => $game->code]);
+        try {    
+            $code = strtoupper(Str::random(6));
+            $game = Game::create([
+                'code' => $code,
+                'imposters_remaining' => 4, 
+                'status' => 'waiting',
+            ]);    
+            return response()->json(['code' => $game->code]);
+    
+        } catch (\Exception $e) {
+            Log::error("Error creating game: " . $e->getMessage());
+            return response()->json(['error' => 'Failed to create game'], 500);
+        }
      }
     // Handle updating the points
     public function awardPoints(Request $request)

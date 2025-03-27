@@ -2,7 +2,8 @@
     <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
         <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center text-2xl font-bold">
         <h2 class = "text-3xl">Code to join the lobby:</h2>
-            {{gameCode}}
+        <div v-if="gameCode && gameCode !== ''">Game Code: {{ gameCode }}</div>
+        <div v-else>No game code available</div>
         
         <div class="players-list"></div>
             <h2 class = "text-xl">Players in Lobby:</h2>
@@ -28,29 +29,34 @@ import { ref, onMounted } from "vue";
 
 export default {
   setup() {
-
     const players = ref([]);  // players list (empty at first)
-    const gameCode = ref("ABC123"); // Sample game code (replace with dynamic data)
+    const gameCode = ref("");  // game code (empty at first)
 
     // Fetch players from backend
-    const fetchPlayers = async () => {
+    const fetchPlayersandCode = async () => {
       try {
-        const response = await axios.get(`/api/players/${gameCode.value}`);
-        players.value = response.data;
-      } catch (error) {
+        const response1 = await axios.get("/api/get-code");
+        gameCode.value = response1.data.code;
+        console.log(response1.data);
+
+        const response2 = await axios.get("/api/getPlayers", {
+        params: {gameCode: gameCode.value}}); //get players from backend
+        players.value = response2.data.players; //asign players from response
+      } 
+       catch (error) {
         console.error("problem fetching players:", error);
       }
     };
 
     // Function to start the game
     const startGame = () => {
-      axios.post("/api/start-game");
+      axios.post("/api/new-game");
     };
 
     // run fetchPlayers() after component loads
-    onMounted(fetchPlayers);
+    onMounted(fetchPlayersandCode);
 
-    return { gameCode, players, startGame };
+    return {gameCode, players, startGame };
   },
 };
 </script>

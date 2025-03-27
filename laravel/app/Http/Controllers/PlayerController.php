@@ -9,10 +9,21 @@ use Illuminate\Http\Request;
 
 class PlayerController extends Controller
 {
-    //
+    //getcode from database 
+
+    public function getCode ()
+    {
+        $game = Game::latest()->first();
+        return response()->json(['code' => $game ? $game->code : null]);
+    }
+
     public function getPlayers($gameCode)
     {
-        $players = Player::where('game_id', $gameCode)->get();
+        $game = Game::where('code', $gameCode)->first();
+        if (!$game) { return response()->json(['error' => 'Game not found'], 404);
+        }
+
+        $players = Player::where('game_id', $game->id)->get();
         return response()->json($players);
     }
 
@@ -31,9 +42,9 @@ class PlayerController extends Controller
         return response()->json(['error' => 'Game not found'], 404);
     }
 
-    if ($game->status !== 'waiting') {
-            return response()->json(['error' => 'Game has already started'], 400);
-        }
+    // if ($game->status !== 'waiting') {
+    //         return response()->json(['error' => 'Game has already started'], 400);
+    //     }
     
     // create the player in the table
         $player = Player::create([

@@ -9,12 +9,14 @@ use Illuminate\Support\Facades\Route;
 
 //getting game code
 Route::get('/latest-game', [GameController::class, 'latest']);
-Route::post('/new-game', [GameController::class, 'create']);
+Route::get('/get-code', [GameController::class, 'getCode']);
+Route::post('/new-game', '\App\Http\Controllers\GameController@create');
+Route::get('/get-code',[PlayerController::class, 'fetchPlayersandCode']);
 
 //joining the lobby
 Route::post('/join-lobby', [PlayerController::class, 'join']);
 
 //getting players to be displayed 
-Route::get('/players/{gameCode}', [PlayerController::class, 'getPlayers']);
+Route::get('/getPlayers', [PlayerController::class, 'getPlayers']);
 
 
