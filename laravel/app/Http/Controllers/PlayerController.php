@@ -17,14 +17,15 @@ class PlayerController extends Controller
         return response()->json(['code' => $game ? $game->code : null]);
     }
 
-    public function getPlayers($gameCode)
+    public function getPlayers($code)
     {
-        $game = Game::where('code', $gameCode)->first();
+        $game = Game::where('code', $code)->first();
         if (!$game) { return response()->json(['error' => 'Game not found'], 404);
         }
 
         $players = Player::where('game_id', $game->id)->get();
-        return response()->json($players);
+        
+        return response()->json(['players' => $players]);
     }
 
     public function join(Request $request)
