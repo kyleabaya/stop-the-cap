@@ -20,8 +20,10 @@ class RoundController extends Controller
         return response()->json($round);
     }
 
-    private function determineImposter(Game $game){
+    private function assignImposter(Game $game){
         $playerIds = $game->players->pluck('id')->toArray();
-        return $playerIds[array_rand($playerIds)];
+        //Randomly assign an Imposter
+        $imposterId = $playerIds[array_rand($playerIds)];
+        return $imposterId;
     }
 }
