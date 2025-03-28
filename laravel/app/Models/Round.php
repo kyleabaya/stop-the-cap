@@ -25,7 +25,7 @@ class Round extends Model
 
     public function prompt()
     {
-        return $this->belongsTo(Prompt::class);
+        return $this->belongsTo(prompts::class);
     }
 
     public function imposter()
