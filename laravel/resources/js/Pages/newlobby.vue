@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
         <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center text-2xl font-bold">
         <h2 class = "text-3xl">Code to join the lobby:</h2>
-        <div v-if="gameCode && gameCode !== ''">Game Code: {{ gameCode }}</div>
+        <div class = "text-6xl" v-if="gameCode && gameCode !== ''">{{ gameCode }}</div>
         <div v-else>No game code available</div>
         
         <div class="players-list"></div>
@@ -33,18 +33,18 @@ export default {
     const gameCode = ref("");  // game code (empty at first)
 
     // Fetch players from backend
-    const fetchPlayersandCode = async () => {
+    const fetchPlayers = async () => {
       try {
         const response1 = await axios.get("/api/get-code");
         gameCode.value = response1.data.code;
-        console.log(response1.data);
+        console.log(response1.data.code);
 
-        const response2 = await axios.get("/api/getPlayers", {
-        params: {gameCode: gameCode.value}}); //get players from backend
+        const response2 = await axios.get("/api/getPlayers", {gameCode: gameCode.value}); 
+        await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value });//get players from backend
         players.value = response2.data.players; //asign players from response
       } 
        catch (error) {
-        console.error("problem fetching players:", error);
+        console.error("problem fetching:", error);
       }
     };
 
@@ -54,7 +54,7 @@ export default {
     };
 
     // run fetchPlayers() after component loads
-    onMounted(fetchPlayersandCode);
+    onMounted(fetchPlayers);
 
     return {gameCode, players, startGame };
   },
