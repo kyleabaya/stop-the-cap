@@ -36,11 +36,9 @@ export default {
     const fetchPlayers = async () => {
       try {
         const response1 = await axios.get("/api/get-code");
-        gameCode.value = response1.data.code;
-        console.log(response1.data.code);
+        gameCode.value = response1.data.code; // assign game code from response
 
-        const response2 = await axios.get("/api/getPlayers", {gameCode: gameCode.value}); 
-        await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value });//get players from backend
+        const response2 =  await axios.get(`/api/getPlayers/${gameCode.value}`);
         players.value = response2.data.players; //asign players from response
       } 
        catch (error) {

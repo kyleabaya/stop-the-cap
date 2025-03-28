@@ -18,4 +18,5 @@ Route::post('/join-lobby', [PlayerController::class, 'join']);
 //getting players to be displayed 
 Route::get('/getPlayers', [PlayerController::class, 'getPlayers']);
 
+Route::get('/getPlayers/{code}', [PlayerController::class, 'getPlayers']);
 
