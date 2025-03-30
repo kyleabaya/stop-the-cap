@@ -14,14 +14,14 @@ class GameController extends Controller
 
 {
     //for /latest-game
-     public function latest()
+    public function latest()
      {
          $latestGame = Game::latest()->first();
          return response()->json(['code' => $latestGame ? $latestGame->code : null]);
      }
  
      // Generates and store a new game code
-     public function create()
+    public function create()
      {
         try {    
             $code = strtoupper(Str::random(6));
@@ -37,75 +37,34 @@ class GameController extends Controller
             return response()->json(['error' => 'Failed to create game'], 500);
         }
      }
-    // Handle updating the points
-    public function awardPoints(Request $request)
+
+    public function show(Game $game)
     {
-        $userId = $request->user()->id;
-        $points = $request->input('points');
-
-        // Find or create a player record
-        $player = Player::firstOrCreate(['user_id' => $userId]);
-
-        // Increment the points for each player
-        $player->increment('points', $points);
-
-        return response()->json(['message' => 'Points awarded!', 'new_points' => $player->points]);
+        return response()->json($game);
     }
 
-    //Handle the round turns
-
-    public function nextRound(Request $request)
+    public function start(Game $game)
     {
-        $userId = $request->user()->id;
+        if ($game->status !== 'waiting') {
+            return response()->json(['error' => 'Game is not in a valid state to start'], 400);
+        }
+        $game->update(['status' => 'in_progress']);
 
-        // Find or create a player record
-        $player = Player::firstOrCreate(['user_id' => $userId]);
-
-        // Increment the round for each player
-        $player->increment('rounds');
-
-        return response()->json(['message' => 'Round incremented!', 'new_rounds' => $player->rounds]);
+        return response()->json($game);
     }
 
-    //Handle states within the rounds.
-    //first from The question, giving a response, chatbox, voting, then next round.
-
-    public function startState($gameId)
+    public function end(Game $game)
     {
-        // Get the latest round or create a new one
-        $currentRound = Round::where('game_id', $gameId)->latest()->first();
-
-        if (!$currentRound || $currentRound->state == 'finished') {
-            $newRoundNumber = $currentRound ? $currentRound->round_number + 1 : 1;
-            $currentRound = Round::create([
-                'game_id' => $gameId,
-                'round_number' => $newRoundNumber,
-                'state' => 'start',
-            ]);
+        if ($game->status === 'completed') {
+            return response()->json(['error' => 'Game already ended'], 400);
         }
 
-        return response()->json([
-            'message' => 'New Round started!',
-            'round' => $currentRound,
-        ]);
+        $game->update(['status' => 'completed']);
+
+        return response()->json($game);
     }
 
-    public function updateRoundState(Request $request, $roundId)
-    {
-        $round = Round::findOrFail($roundId);
-        $newState = $request->input('state');
 
-        if (!in_array($newState, ['start', 'ask_question', 'answer_question', 'chat_for_a_min', 'next_round'])) {
-            return response()->json(['error' => 'Invalid state'], 400);
-        }
-
-        $round->update(['state' => $newState]);
-
-        return response()->json([
-            'message' => 'Moving to next state!',
-            'round' => $round,
-        ]);
-    }
 }
 
 

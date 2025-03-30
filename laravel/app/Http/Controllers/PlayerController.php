@@ -59,4 +59,23 @@ class PlayerController extends Controller
         return response()->json($player, 201);
     }
 
+    public function awardPoints(Request $request)
+    {
+        $request->validate([
+            'player_id' => 'required|integer|exists:players,id',
+            'points'    => 'required|integer|min:0'
+        ]);
+    
+        // 2. Find the existing player by their ID
+        $player = Player::findOrFail($request->input('player_id'));
+    
+        // 3. Increment their points
+        $player->increment('points', $request->input('points'));
+    
+        return response()->json([
+            'message'    => 'Points awarded!',
+            'new_points' => $player->points
+        ], 200);
+    }
+
 }
