@@ -27,3 +27,19 @@ Route::get('/messages/{game_id}', [MessageController::class, 'fetchMessages']);
 Route::post('/messages/new', [MessageController::class, 'fetchNewMessages']);
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 
+//prompt receiving
+Route::get('/prompts', [PromptController::class, 'index']);
+Route::post('/prompts', [PromptController::class, 'store']);
+Route::get('/prompts/{prompt}', [PromptController::class, 'show']);
+Route::get('/prompts/random', [PromptController::class, 'random']);
+Route::get('/prompts/{prompt}', [PromptController::class, 'update']);
+Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
+
+//response
+Route::get()
+
+//votes
+Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
+Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
+
+
