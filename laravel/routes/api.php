@@ -6,6 +6,7 @@ use App\Http\Controllers\RoundController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ImposterController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Route;
 
 //getting game code
@@ -35,8 +36,6 @@ Route::get('/prompts/random', [PromptController::class, 'random']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'update']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
 
-//response
-Route::get()
 
 //votes
 Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
