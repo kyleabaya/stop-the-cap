@@ -37,7 +37,6 @@ export default {
     //For user input 
     const name = ref("");  // Store user input
     const gameCode = ref("");  // Store game code input
-    const players = axios.get("/api/getPlayers");  // players in the lobby
 
     // Fetch the latest game code from the database and join game if the codes match
     const fetchLatestGame = async () => {
@@ -51,7 +50,12 @@ export default {
     // join the game lobby when the button is pressed
     const joinLobby = async () => {
       try {
-        await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value });
+        const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value});
+        localStorage.setItem("player_id", response.data.player_id); // Store in localStorage
+        localStorage.setItem("player_name", response.data.name); 
+        
+        console.log("Player ID:", response.data.player_id);
+        console.log("Player Name:", response.data.name);
       } catch (error) {
         console.error("Error Joining:", error);
       }
@@ -64,6 +68,9 @@ export default {
 
     // Fetch latest game code when the component loads
     onMounted(fetchLatestGame);
+    console.log("Latest Game Code:", gameCode.value);
+    const players = axios.get("/api/getPlayers", {params: { code: gameCode.value } }); // players in the lobby
+
 
     return { gameCode, name, joinLobby, generateNewGame };
   }

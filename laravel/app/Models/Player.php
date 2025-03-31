@@ -22,6 +22,11 @@ class Player extends Model
         return $this->belongsTo(Game::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(messages::class);
+    }
+
     // If you want to see which votes the player cast
     public function votesCast()
     {

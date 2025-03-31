@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\prompts;
 use Illuminate\Http\Request;
 
 class PromptController extends Controller
 {
+
     public function index()
     {
         return response()->json(Prompt::all());
@@ -50,6 +51,4 @@ class PromptController extends Controller
 
         return response()->json($prompt);
     }
-    
-
 }

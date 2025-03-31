@@ -17,7 +17,7 @@ class GameController extends Controller
      public function latest()
      {
          $latestGame = Game::latest()->first();
-         return response()->json(['code' => $latestGame ? $latestGame->code : null]);
+         return response()->json(['code' => $latestGame ? $latestGame->code : null, 'id' => $latestGame->id]);
      }
  
      // Generates and store a new game code
