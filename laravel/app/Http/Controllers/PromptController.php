@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\prompts;
+use App\Models\Prompt;
 use Illuminate\Http\Request;
 
 class PromptController extends Controller
@@ -9,23 +9,23 @@ class PromptController extends Controller
 
     public function index()
     {
-        return response()->json(prompts::all());
+        return response()->json(Prompt::all());
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(['prompt_text' => 'required|string', 'prompt_type' => 'required|string',
         'prompt_type'=>'required|string']);
-        $prompt = prompts::create($validated);
+        $prompt = Prompt::create($validated);
         return response()->json($prompt, 201);
     }
 
-    public function show(prompts $prompt)
+    public function show(Prompt $prompt)
     {
         return response()->json($prompt);
     }
 
-    public function update(Request $request, prompts $prompt)
+    public function update(Request $request, Prompt $prompt)
     {
         $validated = $request->validate([
             'prompt_text' => 'sometimes|string',
@@ -36,7 +36,7 @@ class PromptController extends Controller
         return response()->json($prompt);
     }
 
-    public function destroy(prompts $prompt)
+    public function destroy(Prompt $prompt)
     {
         $prompt->delete();
         return response()->json(['message' => 'Prompt deleted successfully']);
@@ -44,7 +44,7 @@ class PromptController extends Controller
 
     public function random()
     {
-        $prompt = prompts::inRandomOrder()->first();
+        $prompt = Prompt::inRandomOrder()->first();
         if (!$prompt) {
             return response()->json(['error' => 'No prompts available']);
         }
