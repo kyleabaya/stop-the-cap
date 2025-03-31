@@ -27,6 +27,10 @@ Route::get('/joinlobby', function () {
     return Inertia::render('joinlobby');
 });
 
+Route::get('/promptscreen', function () {
+    return Inertia::render('promptscreen');
+});
+
 Route::get('/Help', function () {
     return Inertia::render('Help');
 });

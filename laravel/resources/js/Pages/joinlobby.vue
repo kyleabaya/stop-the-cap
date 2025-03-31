@@ -53,6 +53,7 @@ export default {
         const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value});
         localStorage.setItem("player_id", response.data.player_id); // Store in localStorage
         localStorage.setItem("player_name", response.data.name); 
+        localStorage.setItem("game_code", gameCode.value); // Store in localStorage
         
         console.log("Player ID:", response.data.player_id);
         console.log("Player Name:", response.data.name);
