@@ -18,4 +18,7 @@ class prompts extends Model
     {
         return $this->hasMany(Round::class);
     }
+
+    protected $table = 'prompts'; 
+
 }
