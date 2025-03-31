@@ -9,23 +9,23 @@ class PromptController extends Controller
 
     public function index()
     {
-        return response()->json(Prompt::all());
+        return response()->json(prompts::all());
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate(['prompt_text' => 'required|string', 'prompt_type' => 'required|string',
         'prompt_type'=>'required|string']);
-        $prompt = Prompt::create($validated);
+        $prompt = prompts::create($validated);
         return response()->json($prompt, 201);
     }
 
-    public function show(Prompt $prompt)
+    public function show(prompts $prompt)
     {
         return response()->json($prompt);
     }
 
-    public function update(Request $request, Prompt $prompt)
+    public function update(Request $request, prompts $prompt)
     {
         $validated = $request->validate([
             'prompt_text' => 'sometimes|string',
@@ -36,7 +36,7 @@ class PromptController extends Controller
         return response()->json($prompt);
     }
 
-    public function destroy(Prompt $prompt)
+    public function destroy(prompts $prompt)
     {
         $prompt->delete();
         return response()->json(['message' => 'Prompt deleted successfully']);
@@ -44,7 +44,7 @@ class PromptController extends Controller
 
     public function random()
     {
-        $prompt = Prompt::inRandomOrder()->first();
+        $prompt = prompts::inRandomOrder()->first();
         if (!$prompt) {
             return response()->json(['error' => 'No prompts available']);
         }
