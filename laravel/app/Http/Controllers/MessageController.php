@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\messages;
-use App\Models\prompts;
+use App\Models\Prompt;
 use Illuminate\Support\Facades\Log;
 
 class MessageController extends Controller

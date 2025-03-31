@@ -36,9 +36,6 @@ Route::get('/prompts/random', [PromptController::class, 'random']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'update']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
 
-//response
-Route::post('/responses/store', [PromptController::class, 'store']);
-
 //votes
 Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
 Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
