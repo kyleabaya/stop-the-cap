@@ -51,7 +51,7 @@ export default {
     const joinLobby = async () => {
       try {
         const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value});
-        localStorage.setItem("playerId", response.data.player_id); // Store in localStorage
+        localStorage.setItem("player_id", response.data.player_id); // Store in localStorage
         localStorage.setItem("player_name", response.data.name); 
         
         console.log("Player ID:", response.data.player_id);
