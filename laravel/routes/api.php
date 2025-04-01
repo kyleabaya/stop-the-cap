@@ -7,6 +7,7 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ImposterController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResponseController;
 
@@ -20,6 +21,7 @@ Route::post('/join-lobby', [PlayerController::class, 'join']);
 
 //getting players to be displayed 
 // Route::get('/getPlayers', [PlayerController::class, 'getPlayers']);
+
 Route::get('/getPlayers/{code}', [PlayerController::class, 'getPlayers']);
 
 //for the chatbox
@@ -39,7 +41,6 @@ Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
 //response
 Route::post('/responses/store', [ResponseController::class, 'store']);
 Route::get('/responses/{game_id}', [ResponseController::class, 'getResponses']);
-
 
 //votes
 Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);

@@ -20,5 +20,4 @@ class Prompt extends Model
     {
         return $this->hasMany(Round::class);
     }
-
 }

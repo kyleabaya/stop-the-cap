@@ -1,6 +1,7 @@
 <template>
 
     <div class="min-h-screen flex flex-col justify-center items-center bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover bg-no-repeat bg-center">
+
       <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
         <h1 class="text-4xl font-bold mb-4 text-gray-800">Prompt</h1>
   
@@ -16,6 +17,7 @@
         <button 
         @click="submitResponse"
         class = "px-6 mb-0 py-1 text-2xl bg-green-400 text-white rounded-lg hover:bg-green-800">submit!</button>
+
       </div>
     </div>
   </template>
@@ -32,12 +34,12 @@ export default {
     const gameId = localStorage.getItem("game_id"); 
     const player_id = localStorage.getItem("player_id");
   
-
     const fetchPrompt = async () => {
         try {
             const response = await axios.get('/api/prompts/random');
             prompt.value = response.data.prompt_text; // assign prompt from response
             console.log("Prompt fetched:", response.data);
+   
         } catch (error) {
             console.error("Error fetching prompt:", error);
         }

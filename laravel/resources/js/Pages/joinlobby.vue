@@ -67,6 +67,7 @@ export default {
         localStorage.setItem("player_name", name.value); 
         localStorage.setItem("gameCode", gameCode.value); 
         localStorage.setItem("game_id", response.data.game_id); 
+
         
         console.log("Player ID:", response.data.player_id);
         console.log("Player Name:", response.data.name);

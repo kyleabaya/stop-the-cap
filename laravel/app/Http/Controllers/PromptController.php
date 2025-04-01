@@ -45,6 +45,7 @@ class PromptController extends Controller
     public function random()
     {
         $prompt = \App\Models\Prompt::inRandomOrder()->first();
+
         if (!$prompt) {
             return response()->json(['error' => 'No prompts available']);
         }
