@@ -30,8 +30,8 @@ export default {
     const fetchPrompt = async () => {
         try {
             const response = await axios.get("/api/prompts/random");
-            prompt.value = response.data.prompt; // assign prompt from response
-            console.log("Prompt fetched:", prompt.value);
+            prompt.value = response.data.prompt_text; // assign prompt from response
+            console.log("Prompt fetched:", response.data);
         } catch (error) {
             console.error("Error fetching prompt:", error);
         }

@@ -5,9 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class prompts extends Model
+class Prompt extends Model
 {
     use HasFactory;
+
+    protected $table = 'prompts';
 
     protected $fillable = [
         'prompt_text',
@@ -18,7 +20,5 @@ class prompts extends Model
     {
         return $this->hasMany(Round::class);
     }
-
-    protected $table = 'prompts'; 
 
 }
