@@ -18,4 +18,15 @@ class ResponseController extends Controller
         
         return response()->json($response);
     }
+
+    public function getResponses($game_id)
+    {
+        $responses = Response::where('game_id', $game_id)
+            ->join('players', 'responses.player_id', '=', 'players.id')
+            ->select('responses.id', 'responses.raised_hand', 'players.name as player_name', 'responses.created_at')
+            ->orderBy('responses.created_at', 'asc')
+            ->get();
+
+        return response()->json($responses);
+    }
 }

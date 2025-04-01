@@ -1,0 +1,98 @@
+<template>
+    <div class="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+      <h1 class="text-4xl font-bold text-white animate-pulse mb-8">Waiting for Players...</h1>
+  
+      <!-- Player List -->
+      <div class="flex flex-col items-center space-y-2">
+        <div v-for="player in players" :key="player.id" class="bg-white p-4 rounded-lg shadow-lg text-lg font-semibold text-gray-800 animate-bounce">
+          {{ player.name }}
+        </div>
+      </div>
+  
+      <div class="mt-8 text-white">
+        <p class="text-xl">Game Code: {{ gameCode }}</p>
+        <p class="text-md mt-2">Total Players: {{ players.length }}</p>
+      </div>
+  
+  
+    </div>
+
+</template>
+ 
+
+<script>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+export default {
+
+  setup() {
+    const gameCode = ref('');  // Store game code input
+    const players = ref([]); 
+
+    const fetchLatestGame = async () => {
+  try {
+    const response = await axios.get("/api/latest-game");
+    gameCode.value = response.data.code; 
+    console.log("Fetched Game Code:", gameCode.value); 
+  } catch (error) {
+    console.error("Error fetching latest game:", error);
+  }
+};
+
+    // Fetch players in the lobby based on the game code
+    const getPlayers = async () => {
+      try {
+        console.log("Fetching players for game code:", gameCode.value);
+        const response = await axios.get(`/api/getPlayers/${gameCode.value}`);
+        players.value = response.data.players; // Set players list
+      } catch (error) {
+        console.error("Error getting the players:", error);
+      }
+    };
+
+    onMounted(async () => {
+      await fetchLatestGame();
+      console.log("Game Code after fetch:", gameCode.value); // This should log after the data is fetched
+      getPlayers();
+      setInterval(getPlayers, 5000);
+});
+
+    return { gameCode, players };
+}
+};
+</script>
+  
+  
+  <style scoped>
+  /* Custom TailwindCSS animations */
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  .animate-bounce {
+    animation: bounce 1s infinite;
+  }
+  
+  .animate-pulse {
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  </style>
+  

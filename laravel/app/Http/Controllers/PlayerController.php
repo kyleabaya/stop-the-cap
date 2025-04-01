@@ -27,7 +27,7 @@ class PlayerController extends Controller
         
         return response()->json(['players' => $players]);
     }
-
+    
     public function join(Request $request)
     {
         // Validate the incoming request
