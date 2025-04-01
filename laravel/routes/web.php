@@ -31,6 +31,10 @@ Route::get('/promptscreen', function () {
     return Inertia::render('promptscreen');
 });
 
+Route::get('/waiting', function () {
+    return Inertia::render('waiting');
+});
+
 Route::get('/Help', function () {
     return Inertia::render('Help');
 });

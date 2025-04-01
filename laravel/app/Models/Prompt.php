@@ -9,6 +9,8 @@ class Prompt extends Model
 {
     use HasFactory;
 
+    protected $table = 'prompts';
+
     protected $fillable = [
         'prompt_text',
         'prompt_type'
@@ -18,7 +20,4 @@ class Prompt extends Model
     {
         return $this->hasMany(Round::class);
     }
-
-    protected $table = 'prompts'; 
-
 }

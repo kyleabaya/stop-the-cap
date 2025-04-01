@@ -29,51 +29,68 @@
   </template>
 
 <script>
-import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 export default {
   setup() {
-    //For user input 
     const name = ref("");  // Store user input
     const gameCode = ref("");  // Store game code input
+    const players = ref([]); 
 
-    // Fetch the latest game code from the database and join game if the codes match
     const fetchLatestGame = async () => {
       try {
         const response = await axios.get("/api/latest-game");
+        gameCode.value = response.data.game_code; // Set game code from API response
       } catch (error) {
         console.error("Error fetching latest game:", error);
       }
     };
 
-    // join the game lobby when the button is pressed
+    // Fetch players in the lobby based on the game code
+    const getPlayers = async () => {
+      try {
+        const response = await axios.get(`/api/getPlayers/${gameCode.value}`);
+        players.value = response.data.players; // Set players list
+      } catch (error) {
+        console.error("Error fetching players:", error);
+      }
+    };
+
+    // Join the game lobby when the button is pressed
     const joinLobby = async () => {
       try {
-        const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value});
-        localStorage.setItem("player_id", response.data.player_id); // Store in localStorage
-        localStorage.setItem("player_name", response.data.name); 
-        localStorage.setItem("game_code", gameCode.value); // Store in localStorage
+        const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value });
+
+        //store things in local storage to accces in other pages
+        localStorage.setItem("player_id", response.data.id); 
+        localStorage.setItem("player_name", name.value); 
+        localStorage.setItem("gameCode", gameCode.value); 
+        localStorage.setItem("game_id", response.data.game_id); 
+
         
         console.log("Player ID:", response.data.player_id);
         console.log("Player Name:", response.data.name);
+        getPlayers(); // Fetch players after joining
+        window.location.href = "/waiting"; // Redirect to the waiting screen
+
       } catch (error) {
         console.error("Error Joining:", error);
       }
     };
 
-    // generate a new game lobby
+    // Generate a new game lobby
     const generateNewGame = async () => {
-        const response = await axios.post("/api/new-game");
-    };
+      const response = await axios.post("/api/new-game");
+      gameCode.value = response.data.game_code; // Set game code from API response};
 
-    // Fetch latest game code when the component loads
-    onMounted(fetchLatestGame);
-    console.log("Latest Game Code:", gameCode.value);
-    const players = axios.get("/api/getPlayers", {params: { code: gameCode.value } }); // players in the lobby
+    // Fetch latest game code and players when the component loads
+    onMounted(() => {
+      fetchLatestGame(); 
+    });
+  };
 
-
-    return { gameCode, name, joinLobby, generateNewGame };
+    return { gameCode, name, joinLobby, generateNewGame, players };
   }
 };
 </script>
