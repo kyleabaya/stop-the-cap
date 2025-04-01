@@ -7,7 +7,6 @@ use App\Http\Controllers\VoteController;
 use App\Http\Controllers\ImposterController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResponseController;
 
@@ -22,7 +21,7 @@ Route::post('/join-lobby', [PlayerController::class, 'join']);
 //getting players to be displayed 
 // Route::get('/getPlayers', [PlayerController::class, 'getPlayers']);
 
-Route::get('/getPlayers/{code}', [PlayerController::class, 'getPlayers']);
+Route::get('/games/{code}/players', [PlayerController::class, 'getPlayers']);
 
 //for the chatbox
 // Route::get('/messages', [MessageController::class, 'fetchMessages']);
@@ -33,8 +32,8 @@ Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 //prompt receiving
 Route::get('/prompts', [PromptController::class, 'index']);
 Route::post('/prompts', [PromptController::class, 'store']);
-Route::get('/prompts/{prompt}', [PromptController::class, 'show']);
 Route::get('/prompts/random', [PromptController::class, 'random']);
+Route::get('/prompts/{prompt}', [PromptController::class, 'show']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'update']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
 

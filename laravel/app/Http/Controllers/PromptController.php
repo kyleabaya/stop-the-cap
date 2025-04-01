@@ -14,8 +14,7 @@ class PromptController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate(['prompt_text' => 'required|string', 'prompt_type' => 'required|string',
-        'prompt_type'=>'required|string']);
+        $validated = $request->validate(['prompt_text' => 'required|string', 'prompt_type' => 'required|string']);
         $prompt = Prompt::create($validated);
         return response()->json($prompt, 201);
     }
@@ -44,7 +43,7 @@ class PromptController extends Controller
 
     public function random()
     {
-        $prompt = \App\Models\Prompt::inRandomOrder()->first();
+        $prompt = Prompt::inRandomOrder()->first();
 
         if (!$prompt) {
             return response()->json(['error' => 'No prompts available']);
