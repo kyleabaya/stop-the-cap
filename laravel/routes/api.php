@@ -30,12 +30,13 @@ Route::post('/messages/new', [MessageController::class, 'fetchNewMessages']);
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
 
 //prompt receiving
-Route::get('/prompts', [PromptController::class, 'index']);
-Route::post('/prompts', [PromptController::class, 'store']);
+
 Route::get('/prompts/random', [PromptController::class, 'random']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'show']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'update']);
 Route::get('/prompts/{prompt}', [PromptController::class, 'destroy']);
+Route::get('/prompts', [PromptController::class, 'index']);
+Route::post('/prompts', [PromptController::class, 'store']);
 
 //response
 Route::post('/responses/store', [ResponseController::class, 'store']);

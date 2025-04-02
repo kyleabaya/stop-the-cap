@@ -4,15 +4,13 @@
 
       <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
         <h1 class="text-4xl font-bold mb-4 text-gray-800">Prompt</h1>
-  
+        <div class = text-4xl font-bold >{{prompt}}</div>
         <div>
             <label for="promptResponse" class="block mb-6 text-sm font-medium text-gray-900 dark:text-white">Submit your response below</label>
             <input v-model="promptResponse" type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-800 block w-full p-2.5" required />
         </div>
 
         <div id="responses"></div>
-
-        <div>{{prompt}}</div>
 
         <button 
         @click="submitResponse"

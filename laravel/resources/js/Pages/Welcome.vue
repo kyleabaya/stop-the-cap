@@ -28,7 +28,9 @@ function handleImageError() {
 
 <template>
     <Head title="Welcome to the Game" />
-    <div class="text-black dark:text-white/50 bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover">
+    <div
+        class="bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover text-black dark:text-white/50"
+    >
         <!-- <img
             id="background"
             src="https://static.vecteezy.com/system/resources/previews/008/058/831/non_2x/a-simple-modern-abstract-design-a-beautiful-soft-off-white-element-twisting-and-flowing-on-a-beige-background-illustration-vector.jpg"
@@ -46,7 +48,8 @@ function handleImageError() {
             <div class="relative w-full px-6 lg:max-w-7xl">
                 <header
                     class="grid grid-cols-2 items-center gap-0 py-16 text-3xl font-bold"
-                > Welcome to Stop The Cap!
+                >
+                    Welcome to Stop The Cap!
                     <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
                         <Link
                             v-if="$page.props.auth.user"
@@ -77,12 +80,10 @@ function handleImageError() {
 
                 <main class="mt-6">
                     <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-
                         <a
                             href="/newlobby"
                             class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
                         >
-                           
                             <div class="pt-3 sm:pt-5">
                                 <h2
                                     class="text-xl font-semibold text-black dark:text-white"
@@ -91,7 +92,9 @@ function handleImageError() {
                                 </h2>
 
                                 <p class="mt-4 text-sm/relaxed">
-                                    Start a new lobby to play Stop The Cap with your friends. You can create a new lobby and invite your friends to join you.
+                                    Start a new lobby to play Stop The Cap with
+                                    your friends. You can create a new lobby and
+                                    invite your friends to join you.
                                 </p>
                             </div>
                         </a>
@@ -100,7 +103,6 @@ function handleImageError() {
                             href="/joinlobby"
                             class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
                         >
-
                             <div class="pt-3 sm:pt-5">
                                 <h2
                                     class="text-xl font-semibold text-black dark:text-white"
@@ -109,7 +111,10 @@ function handleImageError() {
                                 </h2>
 
                                 <p class="mt-4 text-sm/relaxed">
-                                    Join a lobby with a code to play Stop The Cap with your friends. You can join a lobby by entering the code provided by your friend.
+                                    Join a lobby with a code to play Stop The
+                                    Cap with your friends. You can join a lobby
+                                    by entering the code provided by your
+                                    friend.
                                 </p>
                             </div>
 
@@ -127,18 +132,19 @@ function handleImageError() {
                                 />
                             </svg>
                         </a>
-                <a href="/Help"
-                class="flex items-start rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
-                >
+                        <a
+                            href="/Help"
+                            class="flex items-start rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+                        >
                             <div class="pt-3 sm:pt-5">
                                 <h2
-                                    class="text-xl font-semibold text-black dark:text-white">
+                                    class="text-xl font-semibold text-black dark:text-white"
+                                >
                                     Help
                                 </h2>
                                 <p>Click here for the rules of the game</p>
-
-                        </div>
-                    </a>
+                            </div>
+                        </a>
                     </div>
                 </main>
 

@@ -43,9 +43,9 @@ class PlayerController extends Controller
         return response()->json(['error' => 'Game not found'], 404);
     }
 
-    // if ($game->status !== 'waiting') {
-    //         return response()->json(['error' => 'Game has already started'], 400);
-    //     }
+    if ($game->status !== 'waiting') {
+            return response()->json(['error' => 'Game has already started'], 400);
+        }
     
     // create the player in the table
         $player = Player::create([
