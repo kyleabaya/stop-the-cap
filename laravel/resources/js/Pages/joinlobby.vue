@@ -15,9 +15,6 @@
         <div class="mt-6">
           <h2 class="text-lg font-semibold text-gray-700">Players in Lobby:</h2>
           <ul class="mt-2 space-y-2">
-            <li v-for="player in players" :key="player.id" class="bg-gray-100 px-4 py-2 rounded-md shadow-sm">
-              {{ player.name }}
-            </li>
           </ul>
         </div>
 

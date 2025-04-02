@@ -46,4 +46,7 @@ Route::get('/responses/{game_id}', [ResponseController::class, 'getResponses']);
 Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
 Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
 
+//rounds 
+Route::post('/start-round', [RoundController::class, 'startGame']);
+
 

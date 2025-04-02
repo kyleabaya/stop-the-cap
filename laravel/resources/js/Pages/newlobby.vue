@@ -14,6 +14,11 @@
             </ul>
         
         <button 
+          @click="generateNewCode"
+          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+          Generate New Code
+        </button>
+        <button 
           @click="startGame"
           class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
           Start Game
@@ -32,6 +37,8 @@ export default {
     const players = ref([]);  // players list (empty at first)
     const gameCode = ref("");  // game code (empty at first)
 
+    // generate a new game code when the component loads
+
     // Fetch players from backend
     const fetchPlayers = async () => {
       try {
@@ -48,9 +55,14 @@ export default {
 
     // Function to start the game
     const startGame = () => {
-      axios.post("/api/new-game");
+      axios.get('/api/start-round'); // start the the round. First phase is Lobby
+      window.location.href = "/waiting"; // redirect to waiting screen
     };
 
+    const generateNewCode = () => {
+        axios.post("/api/new-game"); // generate a new game code
+        fetchPlayers(); // fetch players again to update the list
+    }
     // run fetchPlayers() after component loads
     onMounted(fetchPlayers);
 

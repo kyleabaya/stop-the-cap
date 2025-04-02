@@ -157,3 +157,15 @@ function handleImageError() {
         </div>
     </div>
 </template>
+
+<script>
+export default {
+
+setup() {
+generateNewCode = () => {
+        axios.post("/api/new-game"); // generate a new game code
+        fetchPlayers(); // fetch players again to update the list
+    }
+}
+};
+    </script>
