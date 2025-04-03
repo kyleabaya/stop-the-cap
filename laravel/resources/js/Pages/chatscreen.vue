@@ -13,6 +13,11 @@
       </div>
     </div>
 
+    <!-- 60 second timer -->
+    <div class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
+    <p class="text-lg font-bold">Time Left: {{ timeLeft }}</p>
+    </div>
+
   </div>
     <div class = "m-30 bg-gradient-to-r from-pink-200 to-blue-100 h-max">
       <h2 class = "text-3xl">Live Chat</h2>
@@ -42,6 +47,7 @@
       const currentGameId = ref(null); //replaced later
       // const currentPlayerId = ref(null); //replaced later
       const responses = ref([]); //responses from the previous screen so they can vote on them
+      const timeLeft = ref(60); // 60 seconds timer
 
     const fetchGameId = async () => {
         const response = await axios.get("/api/latest-game");
@@ -53,7 +59,22 @@
         console.log("Current Player Name:", playerName);
 
     };
+    const redirect = async () =>{
+          window.location.href = "/votingscreen"; 
+        };
 
+    const startCountdown = async () =>{
+      const timer = setInterval(() => {
+        if (timeLeft.value > 0) {
+          timeLeft.value--;
+        } else {
+          clearInterval(timer);
+          redirect();
+        }
+      }, 1000);
+    };
+
+    
       // Fetch all messages initially
       const fetchMessages = async () => {
         console.log("Fetching messages for game ID:", currentGameId.value);
@@ -97,13 +118,15 @@
       };
   
       onMounted(async () => {
+        startCountdown();
         await fetchGameId();
         fetchMessages();
         fetchResponses();
-        setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
+        
+        //setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
       });
   
-      return { messages, newMessage, sendMessage };
+      return { messages, newMessage, sendMessage, responses, timeLeft };
     },
   };
   </script>
