@@ -26,4 +26,17 @@ class RoundController extends Controller
         $imposterId = $playerIds[array_rand($playerIds)];
         return $imposterId;
     }
+
+    public function latestRound($game_id)
+    {
+        $latestRound = Round::where('game_id', $game_id)
+                            ->orderBy('created_at', 'desc')
+                            ->first(); 
+    
+        if (!$latestRound) {
+            return response()->json(['message' => 'No rounds found for this game'], 404);
+        }
+    
+        return response()->json($latestRound);
+    }
 }

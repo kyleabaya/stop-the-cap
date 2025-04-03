@@ -19,8 +19,7 @@ Route::get('/get-code',[PlayerController::class, 'getCode']);
 Route::post('/join-lobby', [PlayerController::class, 'join']); 
 
 //getting players to be displayed 
-// Route::get('/getPlayers', [PlayerController::class, 'getPlayers']);
-
+Route::get('/getPlayers/{game_id}', [PlayerController::class, 'getPlayers']);
 Route::get('/games/{code}/players', [PlayerController::class, 'getPlayers']);
 
 //for the chatbox
@@ -48,5 +47,7 @@ Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
 
 //rounds 
 Route::post('/start-round', [RoundController::class, 'startGame']);
+Route::get('/rounds/{game_id}/latest-round', [RoundController::class, 'latestRound']);
+Route::post('/rounds/vote', [VoteController::class, 'store']);
 
 
