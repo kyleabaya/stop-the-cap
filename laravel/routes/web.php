@@ -19,6 +19,14 @@ Route::get('/newlobby', function () {
     return Inertia::render('newlobby');
 });
 
+Route::get('/imposter', function () {
+    return Inertia::render('imposter');
+});
+
+Route::get('/votingscreen', function () {
+    return Inertia::render('votingscreen');
+});
+
 Route::get('/chatscreen', function () {
     return Inertia::render('chatscreen');
 });

@@ -36,6 +36,8 @@ export default {
   setup() {
     const players = ref([]);  // players list (empty at first)
     const gameCode = ref("");  // game code (empty at first)
+    const latestGame = ref(null);
+    localStorage.setItem("game_code", gameCode);
 
     // generate a new game code when the component loads
 
@@ -53,9 +55,13 @@ export default {
       }
     };
 
+    const fetchLatestGame = async () => {
+        latestGame = await axios.get("/api/latest-game");
+    };
+
     // Function to start the game
     const startGame = () => {
-      axios.get('/api/start-round'); // start the the round. First phase is Lobby
+      axios.get('/api/start-round/${latestGame.value}'); // start the the round. First phase is Lobby
       window.location.href = "/waiting"; // redirect to waiting screen
     };
 
@@ -64,9 +70,13 @@ export default {
         fetchPlayers(); // fetch players again to update the list
     }
     // run fetchPlayers() after component loads
-    onMounted(fetchPlayers);
+    onMounted(() => {
+      fetchLatestRound(); 
+      fetchPlayers();
+      fetchLatestGame();
+    });
 
-    return {gameCode, players, startGame };
+    return {gameCode, players, startGame, latestGame };
   },
 };
 </script>
