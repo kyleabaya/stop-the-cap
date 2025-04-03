@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\messages;
+use App\Models\Message;
 use App\Models\Prompt;
 use Illuminate\Support\Facades\Log;
 
@@ -12,7 +12,7 @@ class MessageController extends Controller
     // Fetch all messages
     public function fetchMessages($game_id)
     {
-        $messages = messages::where('game_id', $game_id)
+        $messages = Message::where('game_id', $game_id)
         ->with('player') 
         ->orderBy('created_at', 'asc')
         ->get();
@@ -23,7 +23,7 @@ class MessageController extends Controller
     public function fetchNewMessages(Request $request)
     {
         $lastMessageTime = $request->input('last_message_time');
-        $messages = messages::where('created_at', '>', $lastMessageTime)->latest()->get();
+        $messages = Message::where('created_at', '>', $lastMessageTime)->latest()->get();
         return response()->json($messages);
     }
 
@@ -33,7 +33,7 @@ class MessageController extends Controller
         $request->validate(['content' => 'required',
                             'game_id' => 'required|exists:games,id']);
 
-        $message = messages::create(['content' => $request->input('content'),
+        $message = Message::create(['content' => $request->input('content'),
                                     'game_id' => $request->input('game_id')]);
 
         return response()->json(['success' => true, 'message' => $message]);

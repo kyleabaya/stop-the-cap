@@ -1,4 +1,19 @@
 <template>
+  <div class = "justify center">
+    <h1 class = "text-4xl text-center">Chat Screen</h1>
+    <p class = "text-center">This is the chat screen. You can send and receive messages here.</p>
+    <p class = "text-center">The game ID is: {{ currentGameId }}</p>
+    <p class = "text-center">The player ID is: {{ currentPlayerId }}</p>
+
+    
+    <div v-for= "response in responses" :key="response.id">
+        <h2 class = "text-3xl">Responses</h2>
+        <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50">
+          {{ response.content.name }}: {{ response.content }}
+      </div>
+    </div>
+
+  </div>
     <div class = "m-30 bg-gradient-to-r from-pink-200 to-blue-100 h-max">
       <h2 class = "text-3xl">Live Chat</h2>
       <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50" id="chat-box">
@@ -26,6 +41,7 @@
       let lastMessageTime = "";
       const currentGameId = ref(null); //replaced later
       // const currentPlayerId = ref(null); //replaced later
+      const responses = ref([]); //responses from the previous screen so they can vote on them
 
     const fetchGameId = async () => {
         const response = await axios.get("/api/latest-game");
@@ -72,10 +88,18 @@
           fetchNewMessages(); // Immediately show new message
         }
       };
+
+      //fetch responses to be displayed at the top of the screen
+      const fetchResponses = async () => {
+        const response = await axios.get(`/api/responses/${currentGameId.value}`);
+        console.log("Responses fetched:", response.data);
+        responses.value = response.data;
+      };
   
       onMounted(async () => {
         await fetchGameId();
         fetchMessages();
+        fetchResponses();
         setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
       });
   

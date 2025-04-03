@@ -1,12 +1,27 @@
 <template>
-
     <div class="min-h-screen flex flex-col justify-center items-center bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover bg-no-repeat bg-center">
         <h1 class="text-4xl font-bold mb-4 text-gray-800">Prompt</h1>
         <div class = text-4xl font-bold >{{prompt}}</div>
+
+
         <!-- <div>
             <label for="promptResponse" class="block mb-6 text-sm font-medium text-gray-900 dark:text-white">Submit your response below</label>
             <input v-model="promptTrue" type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-800 block w-full p-2.5" required />
         </div> -->
+
+    <!-- For the no button -->
+    <div class="relative lg:w-[130px]">
+    <img 
+      src="https://static.vecteezy.com/system/resources/previews/007/804/318/non_2x/close-icon-delete-logo-illustration-isolated-on-white-background-editable-stroke-vector.jpg " alt="no" class="lg:w-[130px]" />
+    
+    <!-- Button (Full overlay over the image) -->
+    <button 
+      class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent"
+      @click="submitFalse"
+    >
+    </button>
+    <p>click the x for no</p>
+    </div>
 
     <div class="relative lg:w-[130px]">
     <img 
@@ -18,9 +33,10 @@
       @click="submitTrue"
     >
     </button>
+    <p>click the hand for yes</p>
   </div>
 </div>
-  </template>
+</template>
 
 
 <script>
