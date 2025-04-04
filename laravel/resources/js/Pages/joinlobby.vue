@@ -28,12 +28,14 @@
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 export default {
   setup() {
     const name = ref("");  // Store user input
     const gameCode = ref("");  // Store game code input
     const players = ref([]); 
+    const currPlayer = ref(null);
 
     const fetchLatestGame = async () => {
       try {
@@ -44,7 +46,7 @@ export default {
       }
     };
 
-    // Fetch players in the lobby based on the game code
+    // Fetch players in the lobby based on the game code -- ((((maybe delete this))))
     const getPlayers = async () => {
       try {
         const response = await axios.get(`/api/getPlayers/${gameCode.value}`);
@@ -54,22 +56,33 @@ export default {
       }
     };
 
+    console.log("Current Player:", currPlayer.value);
+
     // Join the game lobby when the button is pressed
     const joinLobby = async () => {
       try {
         const response = await axios.post("/api/join-lobby", { code: gameCode.value, name: name.value });
 
         //store things in local storage to accces in other pages
+        //can condense this to just saving currPlayer value and extracting the rest from there
+        
         localStorage.setItem("player_id", response.data.id); 
         localStorage.setItem("player_name", name.value); 
         localStorage.setItem("gameCode", gameCode.value); 
         localStorage.setItem("game_id", response.data.game_id); 
 
-        
-        console.log("Player ID:", response.data.player_id);
-        console.log("Player Name:", response.data.name);
-        getPlayers(); // Fetch players after joining
-        window.location.href = "/waiting"; // Redirect to the waiting screen
+        const player_id = localStorage.getItem("player_id");
+
+        console.log("Current Player:", response.data);
+        currPlayer.value = response.data;  //assign the player to the current player
+        localStorage.setItem("currPlayer", currPlayer.value);
+
+        // Redirect if this player is an imposter
+        if (currPlayer.value.is_imposter) {
+          router.visit('/imposter');  
+        } else {
+          router.visit('/waiting');  
+        }
 
       } catch (error) {
         console.error("Error Joining:", error);
@@ -84,10 +97,11 @@ export default {
     // Fetch latest game code and players when the component loads
     onMounted(() => {
       fetchLatestGame(); 
+      fetchPlayer();
     });
   };
 
-    return { gameCode, name, joinLobby, generateNewGame, players };
+    return { gameCode, name, joinLobby, generateNewGame, players, currPlayer };
   }
 };
 </script>

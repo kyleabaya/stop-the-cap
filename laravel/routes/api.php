@@ -22,6 +22,9 @@ Route::post('/join-lobby', [PlayerController::class, 'join']);
 Route::get('/getPlayers/{game_id}', [PlayerController::class, 'getPlayers']);
 Route::get('/games/{code}/players', [PlayerController::class, 'getPlayers']);
 
+//get the single current player
+Route::get('getPlayer/{player_id}', [PlayerController::class, 'getPlayer']);
+
 //for the chatbox
 // Route::get('/messages', [MessageController::class, 'fetchMessages']);
 Route::get('/messages/{game_id}', [MessageController::class, 'fetchMessages']);

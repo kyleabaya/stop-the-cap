@@ -121,7 +121,7 @@
         fetchMessages();
         fetchResponses();
         
-        //setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
+        setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
       });
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId };
