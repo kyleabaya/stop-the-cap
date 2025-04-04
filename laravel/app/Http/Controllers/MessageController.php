@@ -30,11 +30,13 @@ class MessageController extends Controller
     // Store a new message
     public function sendMessage(Request $request)
     {
-        $request->validate(['content' => 'required',
-                            'game_id' => 'required|exists:games,id']);
+        $request->validate(['content' => 'required|string',
+                            'game_id' => 'required|exists:games,id',
+                            'player_id' => 'required|exists:players,id',]);
 
         $message = Message::create(['content' => $request->input('content'),
-                                    'game_id' => $request->input('game_id')]);
+                                    'game_id' => $request->input('game_id'),
+                                    'player_id' => $request -> input('player_id'),]);
 
         return response()->json(['success' => true, 'message' => $message]);
     }

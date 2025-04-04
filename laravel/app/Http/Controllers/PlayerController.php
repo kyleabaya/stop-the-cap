@@ -27,6 +27,12 @@ class PlayerController extends Controller
         
         return response()->json(['players' => $players]);
     }
+    //get the current player info from the player_id
+    public function getPlayer($player_id)
+    {
+        $player = Player::find($player_id);
+        return response()->json(['player' => $player]);
+    }
     
     public function join(Request $request)
     {

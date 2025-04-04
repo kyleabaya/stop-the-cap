@@ -9,7 +9,7 @@
     <div v-for= "response in responses" :key="response.id">
         <h2 class = "text-3xl">Responses</h2>
         <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50">
-          {{ response.content.name }}: {{ response.content }}
+          {{ response.data.name }}: {{ response.data }}
       </div>
     </div>
 
@@ -23,9 +23,8 @@
       <h2 class = "text-3xl">Live Chat</h2>
       <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50" id="chat-box">
         <div v-for="msg in messages" :key="msg.id" class="message">
-          {{ msg.content.name }}: {{ msg.content }}
+          <strong>{{ msg.player?.name || 'Unknown' }}:</strong> {{ msg.content }}
         </div>
-
       </div>
   
       <input type="text" v-model="newMessage" placeholder="Type your message">
@@ -45,7 +44,7 @@
       const newMessage = ref("");
       let lastMessageTime = "";
       const currentGameId = ref(null); //replaced later
-      // const currentPlayerId = ref(null); //replaced later
+      const currentPlayerId = ref(null); //replaced later
       const responses = ref([]); //responses from the previous screen so they can vote on them
       const timeLeft = ref(60); // 60 seconds timer
 
@@ -53,7 +52,7 @@
         const response = await axios.get("/api/latest-game");
         currentGameId.value = response.data.id; // Store game ID of the latest game
         const playerName = localStorage.getItem("player_name");
-        // const currentPlayerId = localStorage.getItem("playerId");
+        const currentPlayerId = localStorage.getItem("player_id");
 
         console.log("Current Game ID:", currentGameId.value);
         console.log("Current Player Name:", playerName);
@@ -73,14 +72,12 @@
         }
       }, 1000);
     };
-
     
       // Fetch all messages initially
       const fetchMessages = async () => {
         console.log("Fetching messages for game ID:", currentGameId.value);
         const response = await axios.get(`/api/messages/${currentGameId.value}`);
-        console.log("response: ", response);
-        // currentPlayerId.value = localStorage.getItem("playerId");
+        currentPlayerId.value = localStorage.getItem("player_id");
         console.log("Messages fetched:", response.data);
         messages.value = response.data;
         lastMessageTime = response.data.length > 0 ? response.data[0].created_at : "";
@@ -101,7 +98,8 @@
         if (!newMessage.value.trim()) return;
         const response = await axios.post("/api/messages/send", { 
                 content: newMessage.value, 
-                game_id: currentGameId.value
+                game_id: currentGameId.value,
+                player_id: currentPlayerId.value
                 });
 
         if (response.data.success) {
@@ -123,10 +121,10 @@
         fetchMessages();
         fetchResponses();
         
-        //setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
+        setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
       });
   
-      return { messages, newMessage, sendMessage, responses, timeLeft };
+      return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId };
     },
   };
   </script>
