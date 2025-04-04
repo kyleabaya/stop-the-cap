@@ -39,4 +39,26 @@ class RoundController extends Controller
     
         return response()->json($latestRound);
     }
+
+    public function nextPhase(Request $request)
+    {
+            $request->validate([
+            'game_id' => 'required|exists:games,id',  
+        ]);
+
+        // Get the game by game_id
+        $game = Game::findOrFail($request->input('game_id'));
+        $phaseOrder = ['lobby', 'prompt_received', 'response', 'chat', 'voting', 'next_round'];
+        $currentPhaseIndex = array_search($game->phase, $phaseOrder);
+
+        if ($currentPhaseIndex === false || $currentPhaseIndex == count($phaseOrder) - 1) {
+            return response()->json(['error' => 'Cannot move to the next phase. perhaps you are already at the last phase.']);
+        }
+        // get the next phase
+        $nextPhase = $phaseOrder[$currentPhaseIndex + 1];
+        $game->phase = $nextPhase;
+        $game->save();
+        return response()->json(['game' => $game]);
+    }
+
 }

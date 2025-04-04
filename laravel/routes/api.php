@@ -52,5 +52,7 @@ Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
 Route::post('/start-round', [RoundController::class, 'startGame']);
 Route::get('/rounds/{game_id}/latest-round', [RoundController::class, 'latestRound']);
 Route::post('/rounds/vote', [VoteController::class, 'store']);
+Route::post('/rounds/nextPhase/{game_id}', [RoundController::class, 'nextPhase']);
 
-
+//imposter
+Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealImposter']);

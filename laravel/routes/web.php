@@ -19,6 +19,10 @@ Route::get('/newlobby', function () {
     return Inertia::render('newlobby');
 });
 
+Route::get('/imposterfoundornot', function () {
+    return Inertia::render('imposterfoundornot');
+});
+
 Route::get('/imposter', function () {
     return Inertia::render('imposter');
 });

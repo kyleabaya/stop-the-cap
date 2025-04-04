@@ -37,4 +37,8 @@ class Game extends Model
         return $this->status === 'completed';
     }
 
+    protected $casts = [
+        'phase' => 'string',
+    ];
+
 }

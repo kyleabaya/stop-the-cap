@@ -1,14 +1,14 @@
 <template>
     <div class="p-6 max-w-lg mx-auto">
       <h1 class="text-2xl font-bold text-center mb-4">Vote for a Player</h1>
-  
+  <div v-if="!hasVoted">
       <div v-if="players.length > 0">
         <div 
           v-for="player in players" 
           :key="player.id" 
-          class="flex justify-between items-center bg-gray-200 p-4 rounded-lg shadow mb-2"
-        >
+          class="flex justify-between items-center bg-gray-200 p-4 rounded-lg shadow mb-2">
           <span class="text-lg font-semibold">{{ player.name }}</span>
+
           <button 
             @click="voteForPlayer(player.id)" 
             :disabled="hasVoted"
@@ -20,11 +20,14 @@
       </div>
       <p v-else class="text-center text-gray-500">Loading players...</p>
     </div>
+    <p v-else> <h1 class="items-center">You have voted! Wait until everyone has finished voting</h1> </p>
+  </div>
   </template>
   
   <script>
   import { ref, onMounted } from "vue";
   import axios from "axios";
+  import { router } from "@inertiajs/vue3";
   
   export default {
     setup() {
@@ -52,19 +55,34 @@
       console.log("Round", game_round);
     }
   
-      const voteForPlayer = async (playerId) => {
+      const voteForPlayer = async (suspectplayerId) => {
         try {
-          await axios.post("/api/rounds/vote", { round: game_round, game_id: gameID, player_id: playerID });
+          await axios.post("/api/rounds/vote", { round: game_round, game_id: gameID, player_id: playerID, suspect_id: suspectplayerId })
           hasVoted.value = true;
           alert("Vote submitted successfully!");
         } catch (error) {
           console.error("Error voting:", error);
         }
       };
+
+      const checkPhase = async () => {
+        try {
+          const response = await axios.get('api/rounds/${gameID.value}/latest-round');
+          if (response.data.phase === "voting") {
+            console.log("In voting phase");
+          } else {
+            axios.post('api/rounds/nextPhase/${gameID}'); // move to next phase and then refirect
+            router.visit('/imposterfoundornot');
+          }
+        } catch (error) {
+          console.error("Error checking phase:", error);
+        }
+      };
       
     onMounted(() => {
       fetchLatestRound(); 
       getPlayers();
+      checkPhase();
     });
   
       return { players, voteForPlayer, hasVoted, gameCode, game_round };

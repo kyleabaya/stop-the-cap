@@ -8,6 +8,7 @@ use App\Models\Round;
 use App\Models\Game;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use App\Models\Vote;
 
 
 class GameController extends Controller
@@ -104,6 +105,25 @@ class GameController extends Controller
         return response()->json([
             'message' => 'Moving to next state!',
             'round' => $round,
+        ]);
+    }
+
+    public function revealImposter($game_id)
+    {    $game = Game::findOrFail($game_id);
+        $players = $game->players; // Assuming a relationship is defined in the Game model
+        $votes = Vote::where('game_id', $game_id)->get();
+
+        // Count votes for each player
+        $voteCounts = $votes->groupBy('voted_for_player_id')->map->count();
+        $mostVotedPlayerId = $voteCounts->keys()->max();
+
+        // Find the imposter player
+        $imposter = $players->firstWhere('is_imposter', true);
+        $isImposterRevealed = ($mostVotedPlayerId == $imposter->id);
+
+        return response()->json([
+            'is_imposter_revealed' => $isImposterRevealed,
+            'imposter' => $isImposterRevealed ? $imposter : null
         ]);
     }
 }
