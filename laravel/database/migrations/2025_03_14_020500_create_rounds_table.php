@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('imposter_round_count')->default(1);
             $table->foreignId('imposter_id')->nullable()->constrained('players')->onDelete('set null');
             $table->enum('status',['waiting', 'in_progress', 'completed'])->default('waiting');
+            $table->enum('phases',['lobby', 'prompt_received', 'response', 'chat', 'voting', 'next_round']);
             $table->timestamps();
         });
     }
