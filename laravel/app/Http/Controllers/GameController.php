@@ -20,6 +20,12 @@ class GameController extends Controller
          $latestGame = Game::latest()->first();
          return response()->json(['code' => $latestGame ? $latestGame->code : null, 'id' => $latestGame->id]);
      }
+
+     public function latestGame()
+     {
+         $latestGame = Game::latest()->first();
+         return response()->json($latestGame);
+     }
  
      // Generates and store a new game code
      public function create()
@@ -71,15 +77,15 @@ class GameController extends Controller
     //Handle states within the rounds.
     //first from The question, giving a response, chatbox, voting, then next round.
 
-    public function startState($gameId)
+    public function startState($game_id)
     {
         // Get the latest round or create a new one
-        $currentRound = Round::where('game_id', $gameId)->latest()->first();
+        $currentRound = Round::where('game_id', $game_id)->latest()->first();
 
         if (!$currentRound || $currentRound->state == 'finished') {
             $newRoundNumber = $currentRound ? $currentRound->round_number + 1 : 1;
             $currentRound = Round::create([
-                'game_id' => $gameId,
+                'game_id' => $game_id,
                 'round_number' => $newRoundNumber,
                 'state' => 'start',
             ]);
@@ -99,7 +105,6 @@ class GameController extends Controller
         if (!in_array($newState, ['start', 'ask_question', 'answer_question', 'chat_for_a_min', 'next_round'])) {
             return response()->json(['error' => 'Invalid state'], 400);
         }
-
         $round->update(['state' => $newState]);
 
         return response()->json([
@@ -113,7 +118,6 @@ class GameController extends Controller
         $players = $game->players; // Assuming a relationship is defined in the Game model
         $votes = Vote::where('game_id', $game_id)->get();
 
-        // Count votes for each player
         $voteCounts = $votes->groupBy('voted_for_player_id')->map->count();
         $mostVotedPlayerId = $voteCounts->keys()->max();
 

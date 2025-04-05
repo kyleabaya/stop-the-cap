@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResponseController;
 
 //getting game code
-Route::get('/latest-game', [GameController::class, 'latest']);
+Route::get('/latest-game', [GameController::class, 'latest']);//this only returns id and code
+Route::get('/latest-game-return-game', [GameController::class, 'latestGame']); // this returns the whole game object 
+
 Route::post('/new-game', '\App\Http\Controllers\GameController@create');
 Route::get('/get-code',[PlayerController::class, 'getCode']);
 
@@ -49,10 +51,10 @@ Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
 Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
 
 //rounds 
-Route::post('/start-round', [RoundController::class, 'startGame']);
+Route::post('rounds/{game}/start-round', [RoundController::class, 'startRound']);
 Route::get('/rounds/{game_id}/latest-round', [RoundController::class, 'latestRound']);
 Route::post('/rounds/vote', [VoteController::class, 'store']);
-Route::post('/rounds/nextPhase/{game_id}', [RoundController::class, 'nextPhase']);
+Route::post('/rounds/{game_id}/next-phase', [RoundController::class, 'nextPhase']);
 
 //imposter
 Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealImposter']);

@@ -36,15 +36,15 @@
   
   export default {
     setup() {
-      const gameID = localStorage.getItem("game_id")
-      console.log("Game ID:", gameID);
+      const gameID = ref(localStorage.getItem("game_id"));
+      console.log("Game ID:", gameID.value);
       const isRevealed = ref(false);
       const isImposterFound = ref(false);
       const imposter = ref(null);
 
       const revealImposter = async () => {
         try {
-          const response = await axios.post(`/game/${gameID.value}/reveal-imposter`);
+          const response = await axios.post(`api/game/${gameID.value}/reveal-imposter`);
           
           // Set the state based on the response
           isRevealed.value = true;
@@ -62,11 +62,11 @@
   
       const checkPhase = async () => {
         try {
-          const response = await axios.get('api/rounds/${gameID.value}/latest-round');
+          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
           if (response.data.phase === "voting") {
             console.log("In voting phase");
           } else {
-            axios.post('api/rounds/nextPhase/${gameID}'); // move to next phase and then refirect
+            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
             router.visit('/imposterfoundornot');
           }
         } catch (error) {

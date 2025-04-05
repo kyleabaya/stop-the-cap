@@ -15,7 +15,7 @@ class RoundController extends Controller
         
         $roundNumber = $game->rounds()->count() +1;
 
-        $round = $game->rounds()->create(['round_number'=> $roundNumber, 'imposter_id' => $imposterPlayerId, 'imposter_round_count' => 1, 'status' => 'in_progress' ]);
+        $round = $game->rounds()->create(['round_number'=> $roundNumber, 'imposter_id' => $imposterPlayerId, 'imposter_round_count' => 1, 'status' => 'in_progress', 'phases' => 'lobby']);
         
         return response()->json($round);
     }

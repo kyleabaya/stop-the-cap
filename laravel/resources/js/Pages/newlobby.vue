@@ -38,13 +38,12 @@ export default {
     const gameCode = ref("");  // game code (empty at first)
     const latestGame = ref(null);
     localStorage.setItem("game_code", gameCode);
-
-    // generate a new game code when the component loads
+    const game_id = ref(localStorage.getItem("game_id"));
 
     // Fetch players from backend
     const fetchPlayers = async () => {
       try {
-        const response1 = await axios.get("/api/get-code");
+        const response1 = await axios.get('/api/get-code');
         gameCode.value = response1.data.code; // assign game code from response
 
         const response2 =  await axios.get(`/api/getPlayers/${gameCode.value}`);
@@ -56,13 +55,18 @@ export default {
     };
 
     const fetchLatestGame = async () => {
-        latestGame = await axios.get("/api/latest-game");
+        latestGame.value = await axios.get("/api/latest-game-return-game");
     };
 
     // Function to start the game
     const startGame = () => {
-      axios.get('/api/start-round/${latestGame.value}'); // start the the round. First phase is Lobby
-      window.location.href = "/waiting"; // redirect to waiting screen
+      console.log("Starting game with ID:", latestGame.value.data);
+      const plainGame = JSON.parse(JSON.stringify(latestGame.value.data)); //making the Proxy object a plain object
+      axios.post(`/api/rounds/${plainGame.id}/start-round`, {game: plainGame}); // start the the round. First phase is Lobby
+      axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, { game_id: latestGame.value.data.id } );
+      // move to next phase of round
+      console.log("Game and Round started with ID:", latestGame.value);
+      //window.location.href = "/waiting"; // redirect to waiting screen
     };
 
     const generateNewCode = () => {
@@ -71,12 +75,12 @@ export default {
     }
     // run fetchPlayers() after component loads
     onMounted(() => {
-      fetchLatestRound(); 
-      fetchPlayers();
       fetchLatestGame();
+      //fetchLatestRound(); 
+      fetchPlayers();
     });
 
-    return {gameCode, players, startGame, latestGame };
+    return {gameCode, players, startGame, latestGame, generateNewCode, game_id };
   },
 };
 </script>

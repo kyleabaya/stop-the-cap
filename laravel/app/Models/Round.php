@@ -15,7 +15,8 @@ class Round extends Model
         'prompt_id',
         'imposter_round_count',
         'imposter_id',
-        'status'
+        'status',
+        'phases'
     ];
 
     public function game()
