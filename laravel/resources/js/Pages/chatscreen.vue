@@ -4,14 +4,15 @@
     <p class = "text-center">This is the chat screen. You can send and receive messages here.</p>
     <p class = "text-center">The game ID is: {{ currentGameId }}</p>
     <p class = "text-center">The player ID is: {{ currentPlayerId }}</p>
+    <p>Prompt : {{ prompt }}</p>
 
     
     <div v-for= "response in responses" :key="response.id">
-        <h2 class = "text-3xl">Responses</h2>
         <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50">
-          {{ response.data.name }}: {{ response.data }}
-      </div>
-    </div>
+        {{ response.player?.name }} - {{ response.raised_hand ? '✋' : '' }}
+    </div>      
+  </div>
+
 
     <!-- 60 second timer -->
     <div class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
@@ -47,6 +48,8 @@
       const currentPlayerId = ref(null); //replaced later
       const responses = ref([]); //responses from the previous screen so they can vote on them
       const timeLeft = ref(60); // 60 seconds timer
+      const prompt = localStorage.getItem("prompt"); // get the prompt from local storage
+      console.log("Prompt:", prompt);
 
     const fetchGameId = async () => {
         const response = await axios.get("/api/latest-game");
@@ -110,9 +113,17 @@
 
       //fetch responses to be displayed at the top of the screen
       const fetchResponses = async () => {
-        const response = await axios.get(`/api/responses/${currentGameId.value}`);
-        console.log("Responses fetched:", response.data);
-        responses.value = response.data;
+        try {
+          const response = await fetch(`/api/responses/${currentGameId.value}`);
+          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+          
+          const data = await response.json();
+          console.log("Responses fetched:", data);
+          responses.value = data ?? [];
+        } catch (error) {
+          console.error("Error fetching responses:", error);
+          responses.value = [];
+        }
       };
   
       onMounted(async () => {
@@ -124,7 +135,7 @@
         setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
       });
   
-      return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId };
+      return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };
     },
   };
   </script>

@@ -13,7 +13,9 @@ class Vote extends Model
         'round_id',
         'voter_id',
         'suspect_id',
+        'game_id'
     ];
+
 
     public function round()
     {

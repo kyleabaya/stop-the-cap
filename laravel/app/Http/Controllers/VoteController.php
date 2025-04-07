@@ -9,14 +9,28 @@ use App\Models\Vote;
 
 class VoteController extends Controller
 {
-    //
-    public function store(Round $round, Request $request){
-        $request->validate(['voter_id'   => 'required|integer|exists:players,id',
-            'suspect_id' => 'required|integer|exists:players,id',]);
-        $vote = Vote::create(['round_id' => $round->id, 'voter_id'=> $request ->input('voter_id'), 'suspect_id'=> $request->input('suspect_id'),]);
-        return response()->json($vote);
 
-    }
+    public function store(Request $request)
+{
+    // Validate the input
+    $request->validate([
+        'voter_id'   => 'required|integer|exists:players,id',
+        'suspect_id' => 'required|integer|exists:players,id',
+        'game_id'    => 'required|integer|exists:games,id', 
+        'round_id'   => 'required|integer|exists:rounds,id',
+    ]);
+
+    // Create the vote
+    $vote = Vote::create([
+        'round_id'   => $request->input('round_id'),
+        'voter_id'   => $request->input('voter_id'),
+        'suspect_id' => $request->input('suspect_id'),
+        'game_id'    => $request->input('game_id'), 
+    ]);
+
+    return response()->json($vote);
+}
+
 
     public function tally(Round $round) {
         $votes = $round->votes;

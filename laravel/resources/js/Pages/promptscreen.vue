@@ -48,7 +48,7 @@ export default {
     const promptResponse = ref(false);  // Store user input
     const gameID = ref(localStorage.getItem("game_id")); 
     const player_id = ref(localStorage.getItem("player_id"));
-    const game_round = ref(1); // Store game round
+    const game_round = ref({}); // Store game round
 
     console.log("Game ID:", gameID.value);
     console.log("Player ID:", player_id.value);
@@ -62,6 +62,7 @@ export default {
             const response = await axios.get('/api/prompts/random');
             prompt.value = response.data.prompt_text; // assign prompt from response
             console.log("Prompt fetched:", response.data.prompt_text);
+            localStorage.setItem("prompt", JSON.stringify(response.data.prompt_text)); //store in local storage
    
         } catch (error) {
             console.error("Error fetching prompt:", error);
@@ -70,9 +71,9 @@ export default {
 
     const fetchLatestRound = async () => {
       const res = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-      console.log("Latest round data:", res.data);
+      console.log("Latest round data:", res.data.round_number);
      
-      game_round.value = res.data.round_number;
+      game_round.value = res.data; //submitTrue takes in the round id
       console.log("Round", game_round.value);
     };
   
@@ -80,9 +81,8 @@ export default {
     //submit the vote when the button is pressed
     const submitTrue = async () => {
         try {
-            await fetchLatestRound();
             console.log("Player ID:", player_id.value);
-            await axios.post(`/api/responses/${game_round.value}/store`, {
+            const response = await axios.post(`/api/responses/${game_round.value.id}/store`, {
                 player_id: player_id.value,
                 raised_hand: true
               });
@@ -94,7 +94,7 @@ export default {
     };
 
     async function fetchResponses(gameID) {
-        const response = await fetch(`/api/responses/${gameID}`);
+        const response = await fetch(`/api/responses/${gameID.value}`);
         const data = await response.json();
 
         const responseContainer = document.getElementById('responses');
@@ -110,10 +110,14 @@ export default {
             responseContainer.appendChild(responseElement);
         });
 }
-    //setInterval(() => fetchResponses(gameID), 5000);
-    
-    onMounted(fetchPrompt); // Fetch prompt when component mounts
-    return { prompt, promptResponse, submitTrue, fetchPrompt, gameID, game_round, player_id };
+    setInterval(() => fetchResponses(gameID), 5000);
+    onMounted(() => {
+      fetchLatestRound(); 
+      fetchPrompt();
+    });
+
+    return { prompt, promptResponse, submitTrue, fetchPrompt, gameID, game_round, player_id,
+            fetchLatestRound, fetchResponses};
 }
 };
 </script>

@@ -34,9 +34,9 @@
       const players = ref([]);
       const hasVoted = ref(false);
       const gameCode = ref(null); 
-      const gameID = localStorage.getItem("game_id")
-      const playerID = localStorage.getItem("player_id")
-      const game_round = ref(1)
+      const gameID = ref(localStorage.getItem("game_id"));
+      const playerID = ref(localStorage.getItem("player_id"));
+      const game_round = ref(1);
   
       const getPlayers = async () => {
         try {
@@ -53,12 +53,31 @@
       const res = await axios.get(`api/rounds/${gameID.value}/latest-round`);
       console.log("Latest round data:", res.data);
       game_round.value = res.data.round_number;
-      console.log("Round", game_round);
-    }
+      console.log("Round", game_round.value);
+    };
   
       const voteForPlayer = async (suspectplayerId) => {
         try {
-          await axios.post(`/api/rounds/vote`, { round_id: game_round.value, game_id: gameID, player_id: playerID, suspect_id: suspectplayerId })
+          console.log("Voting for player ID:", suspectplayerId);
+          console.log("Voting in Round:", game_round.value);
+          if (!game_round.value) {
+            console.error("Error: Round ID is null or undefined.");
+            return;
+        }
+        console.log("Sending data:", {
+            round_id: Number(game_round.value),
+            game_id: Number(gameID.value),
+            voter_id: Number(playerID.value),
+            suspect_id: suspectplayerId
+          });
+
+          axios.post(`/api/rounds/${game_round.value}/votes`, 
+            { 
+              game_id: Number(gameID.value), 
+              round_id: Number(game_round.value), 
+              voter_id: Number(playerID.value), 
+              suspect_id: suspectplayerId 
+            })
           hasVoted.value = true;
           alert("Vote submitted successfully!");
         } catch (error) {
@@ -71,21 +90,20 @@
           const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
           if (response.data.phase === "voting") {
             console.log("In voting phase");
-          } else {
+          } else if (response.data.phase === "nextRound") {
             axios.post(`api/rounds/nextPhase/${gameID}`); // move to next phase and then refirect
             router.visit('/imposterfoundornot');
           }
         } catch (error) {
-          console.error("Error checking phase:", error);
+          console.error("Error", error);
         }
       };
-      
-    onMounted(() => {
-      fetchLatestRound(); 
-      getPlayers();
-      setInterval(checkPhase(), 2000);
-    });
-  
+    //setInterval(() => checkPhase(), 2000);
+    onMounted(async () => {
+        await fetchLatestRound(); 
+        getPlayers();
+        
+      });
       return { players, voteForPlayer, hasVoted, gameCode, game_round };
     },
   };
