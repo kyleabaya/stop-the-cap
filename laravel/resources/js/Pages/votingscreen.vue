@@ -85,6 +85,14 @@
         }
       };
 
+      const checkAllVoted = async () => {
+          const router = useRouter();
+          const allVoted = players.every(player => player.has_voted === true);
+          if (allVoted) {
+            router.push('/imposterfoundornot');
+          }
+        };
+
       const checkPhase = async () => {
         try {
           const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
@@ -98,11 +106,12 @@
           console.error("Error", error);
         }
       };
-    //setInterval(() => checkPhase(), 2000);
+    setInterval(() => checkPhase(), 2000);
+    setInterval(() => checkAllVoted(), 2000);
+
     onMounted(async () => {
         await fetchLatestRound(); 
-        getPlayers();
-        
+        getPlayers();        
       });
       return { players, voteForPlayer, hasVoted, gameCode, game_round };
     },

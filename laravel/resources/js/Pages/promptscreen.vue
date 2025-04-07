@@ -32,7 +32,8 @@
       class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent"
       @click="submitTrue"
     >
-    </button>
+    </button
+    @click="submitFalse">
     <p>click the hand for yes</p>
   </div>
 </div>
@@ -41,14 +42,22 @@
 <script>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router"; 
 
 export default {
   setup() {
     const prompt = ref("");  // Store prompt
     const promptResponse = ref(false);  // Store user input
     const gameID = ref(localStorage.getItem("game_id")); 
+    const gameCode = ref(localStorage.getItem("gameCode"));
     const player_id = ref(localStorage.getItem("player_id"));
     const game_round = ref({}); // Store game round
+    const router = useRouter();
+
+
+    //For the check if all players have responded function
+    const allPlayers = ref([]);
+    const allResponses = ref([]);
 
     console.log("Game ID:", gameID.value);
     console.log("Player ID:", player_id.value);
@@ -93,31 +102,61 @@ export default {
         }
     };
 
+    const submitFalse = async () => {
+        try {
+            console.log("Player ID:", player_id.value);
+            const response = await axios.post(`/api/responses/${game_round.value.id}/store`, {
+                player_id: player_id.value,
+                raised_hand: false
+              });
+            promptResponse.value = false; // Clear input after submission
+            console.log("response submitted:", response.data);
+        } catch (error) {
+            console.error("Error submitting response:", error);
+        }
+    };
+
+    const checkIfAllResponded = async () => {
+  try {
+    const [playersRes, responsesRes] = await Promise.all([
+      axios.get(`/api/games/${gameCode.value}/players`),
+      axios.get(`/api/responses/${gameID.value}`)
+    ]);
+
+    console.log("Players fetched:", playersRes.data.players);
+    console.log("Responses fetched:", responsesRes.data);
+
+    allPlayers.value = playersRes.data.players;
+    allResponses.value = responsesRes.data;
+
+    const respondedIDs = new Set(allResponses.value.map(r => r.player_id));
+    const everyoneResponded = allPlayers.value.every(player =>
+      respondedIDs.has(player.id)
+    );
+    console.log("All players responded:", everyoneResponded);
+    if (everyoneResponded) {
+      router.visit('/votingscreen'); 
+    }
+
+  } catch (error) {
+    console.error('Error checking responses:', error);
+  }
+};
+
     async function fetchResponses(gameID) {
         const response = await fetch(`/api/responses/${gameID.value}`);
         const data = await response.json();
-
-        const responseContainer = document.getElementById('responses');
-        responseContainer.innerHTML = ""; //clear previous responses
-
-        data.forEach(res => {
-            const responseElement = document.createElement("div");
-            responseElement.classList.add("response-item");
-            
-            const raisedHandText = res.raised_hand === 1 ? "Raised Hand" : "Not Raised";
-
-            responseElement.innerHTML = `<strong>${res.player_name}:</strong> ${raisedHandText}`;
-            responseContainer.appendChild(responseElement);
-        });
 }
     setInterval(() => fetchResponses(gameID), 5000);
+    setInterval(() => checkIfAllResponded(), 5000);
     onMounted(() => {
       fetchLatestRound(); 
       fetchPrompt();
+      checkIfAllResponded();
     });
 
     return { prompt, promptResponse, submitTrue, fetchPrompt, gameID, game_round, player_id,
-            fetchLatestRound, fetchResponses};
+            fetchLatestRound, fetchResponses, submitFalse};
 }
 };
 </script>
