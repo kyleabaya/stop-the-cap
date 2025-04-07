@@ -11,6 +11,8 @@ class VoteController extends Controller
 {
     //
     public function store(Round $round, Request $request){
+        $request->validate(['voter_id'   => 'required|integer|exists:players,id',
+            'suspect_id' => 'required|integer|exists:players,id',]);
         $vote = Vote::create(['round_id' => $round->id, 'voter_id'=> $request ->input('voter_id'), 'suspect_id'=> $request->input('suspect_id'),]);
         return response()->json($vote);
 
@@ -19,7 +21,33 @@ class VoteController extends Controller
     public function tally(Round $round) {
         $votes = $round->votes;
         $voteCount = $votes->groupBy('suspect_id')->map->count();
-        $votedOutSuspectId = $voteCounts->sortDesc()->keys()->first();
+        $votedOutSuspectId = $voteCount->sortDesc()->keys()->first();
+        $imposterCaught = ($votedOutSuspectId == $round->imposter_id);
+        
+        //point system
+        $pointsCorrectVote = 100;
+        $pointsforCorrectVoteIfCaught = 200;
+        $pointsforImposterIfNotCaught = 300;
+
+        if ($imposterCaught){
+            foreach ($votes as $vote){
+                if($vote->suspect_id == $round->imposter_id) {
+                    $vote->voter->increment('points', $pointsforCorrectVoteIfCaught);
+                    }
+                }
+            } else {
+                foreach ($votes as $vote) {
+                    if($vote->suspect_id == $round->imposter_id){
+                        $vote->voter->increment('points', $pointsforImposterIfNotCaught);
+                    }
+                }
+                $imposter = Player::find($rounds->imposter_id);
+                if($imposter){
+                    $imposter->increment('points', $pointsforImposterIfNotCaught);
+                }
+            }
+            $round->update(['status' => 'completed']);
+
         $result = ['voted_suspect_id'=>$votedOutSuspectId, 'vote_count'=>$voteCount];
     }
 }
