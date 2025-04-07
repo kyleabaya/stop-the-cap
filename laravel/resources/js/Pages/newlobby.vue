@@ -63,7 +63,7 @@ export default {
       console.log("Starting game with ID:", latestGame.value.data);
       const plainGame = JSON.parse(JSON.stringify(latestGame.value.data)); //making the Proxy object a plain object
       axios.post(`/api/rounds/${plainGame.id}/start-round`, {game: plainGame}); // start the the round. First phase is Lobby
-      axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, { game_id: latestGame.value.data.id } );
+      axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, { game_id: latestGame.value.data.id } ); 
       // move to next phase of round
       console.log("Game and Round started with ID:", latestGame.value);
       //window.location.href = "/waiting"; // redirect to waiting screen

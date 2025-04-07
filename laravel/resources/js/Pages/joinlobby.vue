@@ -57,6 +57,7 @@ export default {
     };
 
     console.log("Current Player:", currPlayer.value);
+    localStorage.setItem("currPlayer", JSON.stringify(currPlayer.value));
 
     // Join the game lobby when the button is pressed
     const joinLobby = async () => {

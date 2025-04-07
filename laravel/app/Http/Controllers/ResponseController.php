@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Response;
 use App\Models\Round;
+use Illuminate\Support\Facades\Log;
 
 class ResponseController extends Controller
 {
@@ -12,9 +13,20 @@ class ResponseController extends Controller
     
         $request->validate(['player_id'=> 'required|exists:players,id', 'raised_hand' => 'required|boolean',]);
 
-        if ($round->status !== 'in_progress'){
-            return response()->json((['error' => 'Rounds is not in progress']));
-        }
+        // if ($round->status !== 'in_progress'){
+        //     return response()->json((['error' => 'Rounds is not in progress']));
+        // }
+        Log::info('Incoming data', [
+            'round_id' => $round->id,
+            'player_id' => $request->player_id,
+            'raised_hand' => $request->raised_hand,
+        ]);
+        
+        dd([
+            'round_id' => $round->id,
+            'player_id' => $request->player_id,
+            'raised_hand' => $request->raised_hand,
+        ]);
 
         $response = Response::create(['round_id'=> $round->id,'player_id'=> $request->player_id,'raised_hand'=> $request->raised_hand,]);
         

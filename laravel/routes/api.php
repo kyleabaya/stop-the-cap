@@ -9,6 +9,7 @@ use App\Http\Controllers\PromptController;
 use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ResponseController;
+use App\Models\Round;
 
 //getting game code
 Route::get('/latest-game', [GameController::class, 'latest']);//this only returns id and code
@@ -43,7 +44,7 @@ Route::get('/prompts', [PromptController::class, 'index']);
 Route::post('/prompts', [PromptController::class, 'store']);
 
 //response
-Route::post('/responses/store', [ResponseController::class, 'store']);
+Route::post('/responses/{round}/store', [ResponseController::class, 'store']);
 Route::get('/responses/{game_id}', [ResponseController::class, 'getResponses']);
 
 //votes
@@ -58,3 +59,4 @@ Route::post('/rounds/{game_id}/next-phase', [RoundController::class, 'nextPhase'
 
 //imposter
 Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealImposter']);
+Route::post('game/{game_id}/assign-imposter', [RoundController::class, 'assignImposter']);

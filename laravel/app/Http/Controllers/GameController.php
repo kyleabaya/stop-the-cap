@@ -114,8 +114,9 @@ class GameController extends Controller
     }
 
     public function revealImposter($game_id)
-    {    $game = Game::findOrFail($game_id);
-        $players = $game->players; // Assuming a relationship is defined in the Game model
+    {
+        $game = Game::findOrFail($game_id);
+        $players = $game->players; 
         $votes = Vote::where('game_id', $game_id)->get();
 
         $voteCounts = $votes->groupBy('voted_for_player_id')->map->count();

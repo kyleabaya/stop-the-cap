@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Models\Round;
+use App\Models\Player;
 
 class RoundController extends Controller
 {
@@ -24,6 +25,7 @@ class RoundController extends Controller
         $playerIds = $game->players->pluck('id')->toArray();
         //Randomly assign an Imposter
         $imposterId = $playerIds[array_rand($playerIds)];
+        Player::whereIn('id', [$imposterId])->update(['is_imposter' => true]);
         return $imposterId;
     }
 
@@ -40,25 +42,26 @@ class RoundController extends Controller
         return response()->json($latestRound);
     }
 
-    public function nextPhase(Request $request)
+    public function nextPhase($game_id)
     {
-            $request->validate([
-            'game_id' => 'required|exists:games,id',  
-        ]);
-
-        // Get the game by game_id
-        $game = Game::findOrFail($request->input('game_id'));
-        $phaseOrder = ['lobby', 'prompt_received', 'response', 'chat', 'voting', 'next_round'];
-        $currentPhaseIndex = array_search($game->phase, $phaseOrder);
-
-        if ($currentPhaseIndex === false || $currentPhaseIndex == count($phaseOrder) - 1) {
-            return response()->json(['error' => 'Cannot move to the next phase. perhaps you are already at the last phase.']);
+        $game = Game::findOrFail($game_id);
+        $round = $game->rounds()->latest()->first(); 
+    
+        if (!$round) {
+            return response()->json(['error' => 'No round found for this game'], 404);
         }
-        // get the next phase
-        $nextPhase = $phaseOrder[$currentPhaseIndex + 1];
-        $game->phase = $nextPhase;
-        $game->save();
-        return response()->json(['game' => $game]);
+    
+        $phaseOrder = ['lobby', 'prompt_received', 'response', 'chat', 'voting', 'next_round'];
+        $currentPhaseIndex = array_search($round->phases, $phaseOrder);
+    
+        if ($currentPhaseIndex === false || $currentPhaseIndex === count($phaseOrder) - 1) {
+            return response()->json(['message' => 'No further phases'], 400);
+        }
+        // move to next phase
+        $round->phases = $phaseOrder[$currentPhaseIndex + 1];
+        $round->save();
+        return response()->json(['next_phase' => $round->phases]);
     }
+    
 
 }
