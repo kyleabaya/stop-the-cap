@@ -1,25 +1,23 @@
 <template>
-  <div class = "justify center">
-    <h1 class = "text-4xl text-center">Chat Screen</h1>
+  <div class = "justify center bg-gradient-to-r from-pink-200 to-blue-100">
     <p class = "text-center">This is the chat screen. You can send and receive messages here.</p>
     <p class = "text-center">The game ID is: {{ currentGameId }}</p>
-    <p class = "text-center">The player ID is: {{ currentPlayerId }}</p>
-    <p>Prompt : {{ prompt }}</p>
+    <p class = "text-center">The player is: {{ currentPlayerId }}</p>
+    <p class = "text-center text-2xl font-bold">Prompt : {{ prompt }}</p>
 
-    
-    <div v-for= "response in responses" :key="response.id">
-        <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50">
-        {{ response.player?.name }} - {{ response.raised_hand ? '✋' : '' }}
+  <div class="flex space-x-4">
+    <div v-for="response in responses" :key="response.id" class="rounded-sm  p-2">
+      {{ response.player?.name }} ->{{ response.raised_hand ? '✋' : '' }}
     </div>      
   </div>
-
+ </div>
 
     <!-- 60 second timer -->
     <div class="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
     <p class="text-lg font-bold">Time Left: {{ timeLeft }}</p>
     </div>
 
-  </div>
+ 
     <div class = "m-30 bg-gradient-to-r from-pink-200 to-blue-100 h-max">
       <h2 class = "text-3xl">Live Chat</h2>
       <div class = "rounded-sm bg-gradient-to-r to-pink-50 from-blue-50" id="chat-box">
@@ -47,7 +45,7 @@
       const currentGameId = ref(null); //replaced later
       const currentPlayerId = ref(null); //replaced later
       const responses = ref([]); //responses from the previous screen so they can vote on them
-      const timeLeft = ref(60); // 60 seconds timer
+      const timeLeft = ref(120); // 120 seconds timer
       const prompt = localStorage.getItem("prompt"); // get the prompt from local storage
       console.log("Prompt:", prompt);
 
@@ -87,14 +85,14 @@
       };
   
       // Fetch new messages every 0.5 seconds
-      const fetchNewMessages = async () => {
-        if (!lastMessageTime) return;
-        const response = await axios.post("/api/messages/new", { 
-                last_message_time: lastMessageTime, game_id: currentGameId});
-                messages.value.push(...response.data);
+      // const fetchNewMessages = async () => {
+      //   if (!lastMessageTime) return;
+      //   const response = await axios.post("/api/messages/new", { 
+      //           last_message_time: lastMessageTime, game_id: currentGameId});
+      //           messages.value.push(...response.data);
 
-        if (response.data.length > 0) lastMessageTime = response.data[response.data.length - 1].created_at;
-      };
+      //   if (response.data.length > 0) lastMessageTime = response.data[response.data.length - 1].created_at;
+      // };
   
       // Send a new message
       const sendMessage = async () => {
@@ -125,14 +123,16 @@
           responses.value = [];
         }
       };
-  
+
+      setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
+
       onMounted(async () => {
         startCountdown();
         await fetchGameId();
         fetchMessages();
         fetchResponses();
         
-        setInterval(fetchNewMessages, 500); // Check for new messages every 0.5 seconds
+        
       });
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };

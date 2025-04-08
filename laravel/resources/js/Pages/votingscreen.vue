@@ -105,7 +105,7 @@
           const router = useRouter();
           const allVoted = players.every(player => player.has_voted === true);
           if (allVoted) {
-            router.push('/imposterfoundornot');
+            router.visit('/imposterfoundornot');
           }
         };
 
@@ -122,6 +122,7 @@
           console.error("Error", error);
         }
       };
+      
     setInterval(() => checkPhase(), 2000);
     setInterval(() => checkAllVoted(), 2000);
 

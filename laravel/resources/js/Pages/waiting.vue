@@ -1,10 +1,10 @@
 <template>
     <div class="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-      <h1 class="text-4xl font-bold text-white animate-pulse mb-8">Waiting for Players...</h1>
+      <h1 class="text-5xl font-bold text-white animate-pulse mb-8">Waiting for Players to Join...</h1>
   
       <!-- Player List -->
-      <div class="flex flex-col items-center space-y-2">
-        <div v-for="player in players" :key="player.id" class="bg-white p-4 rounded-lg shadow-lg text-lg font-semibold text-gray-800 animate-bounce">
+      <div class="flex flex-5 items-center">
+        <div v-for="player in players" :key="player.id" class="pl-5 bg-white p-4 rounded-lg shadow-lg text-lg font-semibold text-gray-800 animate-bounce">
           {{ player.name }}
         </div>
       </div>
@@ -13,7 +13,6 @@
         <p class="text-xl">Game Code: {{ gameCode }}</p>
         <p class="text-md mt-2">Total Players: {{ players.length }}</p>
       </div>
-  
   
     </div>
 
@@ -65,7 +64,6 @@ export default {
   
   
   <style scoped>
-  /* Custom TailwindCSS animations */
   @keyframes bounce {
     0%, 100% {
       transform: translateY(0);

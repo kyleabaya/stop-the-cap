@@ -9,28 +9,28 @@
   </div>
   <!-- if the player has not responded -->
      <div v-if ="!hasResponded">
+  <div class="flex space-x-4 px pt-10">
     <!-- For the no button -->
-    <div class="relative lg:w-[130px] hover:scale-[1.10] transition-transform mb-10">
+    <div class="relative lg:w-[130px] hover:scale-[1.25] transition-transform mb-5 pr-8">
     <img 
       src="https://static.vecteezy.com/system/resources/previews/007/804/318/non_2x/close-icon-delete-logo-illustration-isolated-on-white-background-editable-stroke-vector.jpg " alt="no" class="lg:w-[130px]" />
     
     <!-- Button (Full overlay over the image) -->
     <button 
-      class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent hover:scale-[1.15] transition-transform"
+      class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent hover:scale-[1.25] transition-transform"
       @click="submitFalse"
     >
     </button>
     <p>click the x for no</p>
     </div>
-  <div class="p-100px"></div>
 
-    <div class="relative lg:w-[130px] hover:scale-[1.10] transition-transform mb-10">
+    <div class="relative lg:w-[130px] hover:scale-[1.25] transition-transform mb-5 pl-8">
     <img 
       src="https://i.pinimg.com/474x/6b/42/28/6b4228903e0489c5dfcfdf5cc7196e33.jpg" alt="hand" class="lg:w-[130px]" />
     
     <!-- Button (Full overlay over the image) -->
     <button 
-      class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent hover:scale-[1.15] transition-transform"
+      class="absolute w-full h-full top-0 left-0 flex items-center justify-center text-black bg-transparent hover:scale-[1.25] transition-transform"
       @click="submitTrue"
     >
     </button
@@ -38,6 +38,7 @@
     <p>click the hand for yes</p>
   </div> 
     </div>
+  </div>
     <div v-else>
       <h2 class="text-3xl font-bold mb-4 text-gray-800">You have already responded!</h2>
       <p class="text-xl">Wait for the other players to respond.</p>
@@ -156,7 +157,7 @@ export default {
     );
     console.log("All players responded:", everyoneResponded);
     if (everyoneResponded) {
-      router.visit('/votingscreen'); 
+      router.visit('/chatscreen'); 
     }
 
   } catch (error) {
