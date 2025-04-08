@@ -6,7 +6,7 @@
         <div class="relative z-10 flex flex-col items-center justify-center space-y-6 text-black text-center">
           <h2 class="text-4xl font-extrabold text-4xl md:text-6xl">
             <span v-if="isImposterFound" class="text-amber-400">The Imposter</span>
-            <span v-else class="text-red-500">The Imposter Was Not Found!</span>
+            <span v-else class="text-red-500">The Imposter Was Not Found! 👀</span>
           </h2>
           <p class="text-lg font-semibold">
             <span v-if="isImposterFound">Revealed! It was <span class="font-bold">{{ imposter.name }}</span>!</span>
@@ -14,17 +14,17 @@
           </p>
           <button
             @click="goToNextRound"
-            class="bg-yellow-500 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-yellow-600 transform hover:scale-110"
+            class="bg-green-300 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-green-400 transform hover:scale-110"
           >
-          Continue to Next Round : Try Again 
+          Continue to Next Round
           </button>
         </div>
       </div>
   
-      <!-- revealing State  (slow) -->
+      <!-- revealing State  -->
       <div v-else class="flex flex-col items-center justify-center space-y-4 text-black text-center">
         <p class="text-2xl">Revealing the Imposter...</p>
-        <div class="w-24 h-24 border-4 border-t-4 border-yellow-400 border-solid rounded-full animate-spin"></div>
+        <div class="w-24 h-24 border-8 mr-3 rounded-full animate-spin"></div>
       </div>
     </div>
   </template>
@@ -59,8 +59,8 @@
         // start the next round. First phase is Lobby so change it to Prompt phase 
         //also increment the round number that imposter is on, if it is already at 3 rounds, then set it to zero and then start the round. 
         console.log('Game ID:', gameID.value);
-        const response = await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`); 
-        //router.visit('/promptscreen');
+        await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`); 
+        router.visit('/promptscreen');
       }
   
       const checkPhase = async () => {
@@ -78,7 +78,9 @@
       };
       
     onMounted(() => {
-      revealImposter();
+      setTimeout(() => {
+        revealImposter(); 
+      }, 2000); 
     });
   
       return { revealImposter, isRevealed, isImposterFound, imposter, goToNextRound };
