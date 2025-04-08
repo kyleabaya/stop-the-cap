@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Models\Round;
 use App\Models\Player;
+use Illuminate\Support\Facades\Log;
+
 
 class RoundController extends Controller
 {
@@ -23,7 +25,7 @@ class RoundController extends Controller
 
     private function assignImposter(Game $game){
         $playerIds = $game->players->pluck('id')->toArray();
-        //Randomly assign an Imposter
+        //randomly assign an Imposter
         $imposterId = $playerIds[array_rand($playerIds)];
         Player::whereIn('id', [$imposterId])->update(['is_imposter' => true]);
         return $imposterId;
@@ -62,6 +64,78 @@ class RoundController extends Controller
         $round->save();
         return response()->json(['next_phase' => $round->phases]);
     }
-    
 
+    //Handles the end of the game
+    public function resetOrContinueImposterRound(Request $request)
+{
+    $game_id = (int) $request->route('game_id');
+
+    $game = Game::with('players')->findOrFail($game_id);
+
+    $latestRound = Round::where('game_id', $game->id)
+        ->orderByDesc('created_at')
+        ->first();
+
+    if (!$latestRound) {
+        return response()->json(['error' => 'No rounds found for game.'], 404);
+    }
+
+    $currentImposter = Player::where('game_id', $game->id)
+        ->where('is_imposter', true)
+        ->first();
+
+    if (!$currentImposter) {
+        return response()->json(['error' => 'No imposter assigned in this game.'], 404);
+    }
+
+    if ($latestRound->imposter_round_count > 3) {
+        $currentImposter->is_imposter = false; 
+        $currentImposter->save();
+
+        $newImposter = Player::where('game_id', $game->id)
+            ->where('id', '!=', $currentImposter->id)
+            ->inRandomOrder()
+            ->first();
+
+        $newImposter->is_imposter = true;
+        $newImposter->save();
+        // Check if there are imposters remaining
+        if ($game->imposters_remaining <= 0) {
+            return response()->json([
+                'message' => 'No imposters remaining. Game is OVER.',
+                'game_id' => $game->id
+            ]);
+        }
+        //if there are imposters remaining, decrement the imposters_remaining
+        $game->decrement('imposters_remaining');
+
+        $newRound = Round::create([
+            'game_id' => $game->id,
+            'round_number' => $latestRound->round_number + 1,
+            'imposter_id' => $newImposter->id,
+            'imposter_round_count' => 1,
+        ]);
+
+        return response()->json([
+            'message' => 'Imposter changed. New round started. Also decremented # of imposters remaining',
+            'new_round' => $newRound,
+            'new_imposter' => $newImposter,
+        ]);
+    }
+
+    // otherwise, continue with same imposter but still make a new round
+
+    $newRound = Round::create([
+        'game_id' => $game->id, //same game
+        'round_number' => $latestRound->round_number + 1, //new round number
+        'imposter_id' => $currentImposter->id, //keep the same imposter
+        'imposter_round_count' => $latestRound->imposter_round_count +1, // increment imposter round count
+    ]);
+
+    return response()->json([
+        'message' => 'Same imposter, game continues to next round of that imposter.',
+        'new_round' => $newRound,
+        'updated_round' => $latestRound,
+    ]);
 }
+};

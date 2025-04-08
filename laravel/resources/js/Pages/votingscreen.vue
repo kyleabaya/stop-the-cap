@@ -1,28 +1,44 @@
 <template>
-    <div class="p-6 max-w-lg mx-auto bg-url['https://img.freepik.com/free-vector/abstract-blue-geometric-shapes-background_1035-17545.jpg'] big-cover shadow-md">
-      <h1 class="text-2xl font-bold text-center mb-4">Who do you think is capping?</h1>
-      <div v-if="!hasVoted">
-          <div v-if="players.length > 0">
-            <div 
-              v-for="player in players" 
-              :key="player.id" 
-              class="flex justify-between items-center bg-gray-200 p-4 rounded-lg shadow mb-2">
-              <span class="text-lg font-semibold">{{ player.name }}</span>
+  <div
+    class="min-h-screen flex flex-col items-center justify-center p-6 "
+    style=" background-size: cover; background-blend-mode: overlay; background-image: url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg');"
+  >
+    <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl max-w-xl w-full p-8">
+      <h1 class="text-3xl font-extrabold text-center text-blue-900 mb-6">
+        🕵️‍♀️ Who's Capping?
+      </h1>
 
-              <button 
-                @click="voteForPlayer(player.id)" 
-                :disabled="hasVoted"
-                class="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 disabled:bg-gray-400"
-              >
-                Vote
-              </button>
-            </div>
+      <div v-if="!hasVoted">
+        <div v-if="players.length > 0" class="space-y-4">
+          <div
+            v-for="player in players"
+            :key="player.id"
+            class="flex justify-between items-center bg-white border border-gray-200 p-4 rounded-xl shadow-md hover:scale-[1.10] transition-transform"
+          >
+            <span class="text-lg font-medium text-gray-700">
+              👤 {{ player.name }}
+            </span>
+
+            <button
+              @click="voteForPlayer(player.id)"
+              :disabled="hasVoted"
+              class="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-full hover:from-blue-600 hover:to-indigo-600 transition-all"
+            >
+              Vote
+            </button>
           </div>
-          <p v-else class="text-center text-gray-500">Loading players...</p>
         </div>
-        <p v-else> <h1 class="items-center">You have voted! Wait until everyone has finished voting</h1> </p>
+        <p v-else class="text-center text-gray-600 mt-4">Loading players...</p>
       </div>
-  </template>
+
+      <div v-else class="text-center mt-8">
+        <h2 class="text-xl font-semibold text-green-700">You have voted! </h2>
+        <p class="text-gray-700 mt-2">Wait until everyone else has finished voting. 🤔 </p>
+      </div>
+    </div>
+  </div>
+</template>
+
   
   <script>
   import { ref, onMounted } from "vue";
@@ -55,7 +71,7 @@
       game_round.value = res.data.round_number;
       console.log("Round", game_round.value);
     };
-  
+
       const voteForPlayer = async (suspectplayerId) => {
         try {
           console.log("Voting for player ID:", suspectplayerId);

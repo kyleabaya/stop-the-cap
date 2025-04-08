@@ -76,27 +76,7 @@ class GameController extends Controller
 
     //Handle states within the rounds.
     //first from The question, giving a response, chatbox, voting, then next round.
-
-    public function startState($game_id)
-    {
-        // Get the latest round or create a new one
-        $currentRound = Round::where('game_id', $game_id)->latest()->first();
-
-        if (!$currentRound || $currentRound->state == 'finished') {
-            $newRoundNumber = $currentRound ? $currentRound->round_number + 1 : 1;
-            $currentRound = Round::create([
-                'game_id' => $game_id,
-                'round_number' => $newRoundNumber,
-                'state' => 'start',
-            ]);
-        }
-
-        return response()->json([
-            'message' => 'New Round started!',
-            'round' => $currentRound,
-        ]);
-    }
-
+   
     public function updateRoundState(Request $request, $roundId)
     {
         $round = Round::findOrFail($roundId);
