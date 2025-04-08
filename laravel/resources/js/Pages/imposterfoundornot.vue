@@ -4,13 +4,13 @@
       <div v-if="isRevealed" class="w-full max-w-4xl p-6 bg-white rounded-xl shadow-xl relative overflow-hidden">
         <div class="absolute inset-0 bg-gray opacity-50"></div>
         <div class="relative z-10 flex flex-col items-center justify-center space-y-6 text-black text-center">
-          <h2 class="text-4xl font-extrabold text-4xl md:text-6xl">
-            <span v-if="isImposterFound" class="text-amber-400">The Imposter</span>
-            <span v-else class="text-red-500">The Imposter Was Not Found! 👀</span>
+          <h2 class="text-4xl font-extrabold md:text-6xl">
+            <span v-if="isImposterFound" class="text-amber-400">The Capper</span>
+            <span v-else class="text-red-500">The Capper Was Not Found! 👀</span>
           </h2>
           <p class="text-lg font-semibold">
             <span v-if="isImposterFound">Revealed! It was <span class="font-bold">{{ imposter.name }}</span>!</span>
-            <span v-else>No one could identify the imposter...</span>
+            <span v-else class = "text-3xl">No one could identify the Capper...</span>
           </p>
           <button
             @click="goToNextRound"
@@ -22,10 +22,12 @@
       </div>
   
       <!-- revealing State  -->
-      <div v-else class="flex flex-col items-center justify-center space-y-4 text-black text-center">
-        <p class="text-2xl">Revealing the Imposter...</p>
-        <div class="w-24 h-24 border-8 mr-3 rounded-full animate-spin"></div>
-      </div>
+      <div v-else class = 'flex space-x-2 justify-center items-center h-screen dark:invert'>
+          <span class = "text-white text-5xl">Has the Capper been caught?...</span>
+          <div class='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+          <div class='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+          <div class='h-8 w-8 bg-black rounded-full animate-bounce'></div>
+        </div>
     </div>
   </template>
     
