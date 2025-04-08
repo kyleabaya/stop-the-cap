@@ -55,9 +55,12 @@
         }
       }
 
-      const goToNextRound = async () => {
-        // Logic to transition to the next round
-        router.visit('/promptscreen');
+      const goToNextRound = async () => {        
+        // start the next round. First phase is Lobby so change it to Prompt phase 
+        //also increment the round number that imposter is on, if it is already at 3 rounds, then set it to zero and then start the round. 
+        console.log('Game ID:', gameID.value);
+        const response = await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`); 
+        //router.visit('/promptscreen');
       }
   
       const checkPhase = async () => {

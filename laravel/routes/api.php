@@ -56,6 +56,7 @@ Route::post('rounds/{game}/start-round', [RoundController::class, 'startRound'])
 Route::get('/rounds/{game_id}/latest-round', [RoundController::class, 'latestRound']);
 Route::post('/rounds/vote', [VoteController::class, 'store']);
 Route::post('/rounds/{game_id}/next-phase', [RoundController::class, 'nextPhase']);
+Route::get('/rounds/{game_id}/reset-or-continue-imposter', [RoundController::class, 'resetOrContinueImposterRound']);
 
 //imposter
 Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealImposter']);
