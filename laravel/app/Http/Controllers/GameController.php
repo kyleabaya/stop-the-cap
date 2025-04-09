@@ -101,6 +101,21 @@ class GameController extends Controller
             'imposter' => $isImposterRevealed ? $imposter : null
         ]);
     }
+
+    public function finalResults($gameId)
+    {
+    $game = Game::with('players')->findOrFail($gameId);
+
+    $players = $game->players()->select('id', 'name', 'points')->get();
+
+    // Find player with max points
+    $winner = $players->sortByDesc('points')->first();
+
+    return response()->json([
+        'players' => $players,
+        'winner' => $winner,
+    ]);
+    }
 }
 
 

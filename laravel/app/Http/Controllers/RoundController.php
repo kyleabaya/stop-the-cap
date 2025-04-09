@@ -13,17 +13,33 @@ class RoundController extends Controller
 {
     //Start a New Round
     public function startRound(Game $game, Request $request){
+
+        // Get current imposter
+        $currentImposter = $game->players()->where('is_imposter', true)->first();
         //assign imposter or keep imposter
-        $imposterPlayerId = $this->assignImposter($game);
-        
+
+        if(!$currentImposter) {
+            $imposterPlayerId = $this->assignImposter($game);
+            $imposterRoundCount = 1;
+        } else {
+            $imposterPlayerId = $currentImposter->id;
+
+            $lastRound = $game->rounds()->latest()->first();
+            $imposterRoundCount = $lastRound ? $lastRound->imposter_round_count + 1 : 1;
+        }
+
+        $prompt = \App\Models\Prompt::inRandomOrder()->first();
+
         $roundNumber = $game->rounds()->count() +1;
 
         $round = $game->rounds()->create([
             'round_number'=> $roundNumber, 
             'imposter_id' => $imposterPlayerId, 
-            'imposter_round_count' => 1, 
+            'imposter_round_count' => $imposterRoundCount, 
+            'prompt_id' => $prompt->id,
             'status' => 'in_progress', 
-            'phases' => 'lobby']);
+            'phases' => 'lobby',]);
+        
         
         return response()->json($round);
     }
@@ -38,7 +54,7 @@ class RoundController extends Controller
 
     public function latestRound($game_id)
     {
-        $latestRound = Round::where('game_id', $game_id)
+        $latestRound = Round::with('prompt')->where('game_id', $game_id)
                             ->orderBy('created_at', 'desc')
                             ->first(); 
     

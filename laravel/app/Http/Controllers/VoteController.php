@@ -44,26 +44,28 @@ class VoteController extends Controller
         $pointsforCorrectVoteIfCaught = 200;
         $pointsforImposterIfNotCaught = 300;
 
-        if ($imposterCaught){
-            foreach ($votes as $vote){
-                if($vote->suspect_id == $round->imposter_id) {
-                    $vote->voter->increment('points', $pointsforCorrectVoteIfCaught);
-                    }
-                }
-            } else {
-                foreach ($votes as $vote) {
-                    if($vote->suspect_id == $round->imposter_id){
-                        $vote->voter->increment('points', $pointsforImposterIfNotCaught);
-                    }
-                }
-                $imposter = Player::find($rounds->imposter_id);
-                if($imposter){
-                    $imposter->increment('points', $pointsforImposterIfNotCaught);
-                }
+        foreach ($votes as $vote) {
+            if ($vote->suspect_id == $round->imposter_id) {
+                $vote->voter->increment('points', $imposterCaught ? $pointsIfCaught : $pointsIfNotCaught);
             }
-            $round->update(['status' => 'completed']);
-
-        $result = ['voted_suspect_id'=>$votedOutSuspectId, 'vote_count'=>$voteCount];
+        }
+    
+        if (!$imposterCaught) {
+            $imposter = Player::find($round->imposter_id);
+            if ($imposter) {
+                $imposter->increment('points', $pointsForImposterIfNotCaught);
+            }
+        }
+    
+        $round->update(['status' => 'completed']);
+    
+        return response()->json([
+            'voted_suspect_id' => $votedOutSuspectId,
+            'imposter_caught' => $imposterCaught,
+            'vote_count' => $voteCount,
+            'imposter_id' => $round->imposter_id,
+            'round_id' => $round->id,
+        ]);
     }
 
 
@@ -78,7 +80,8 @@ class VoteController extends Controller
 
         return response()->json([
             'message' => 'Tally after imposter caught',
-            'players' => $game->players()->select('id', 'name', 'points', 'is_imposter')->get()
+            'players' => $game->players()->select('id', 'name', 'points', 'is_imposter')->get(),
+            'imposters_remaining' => $game->imposters_remaining,
         ]);
     }
 

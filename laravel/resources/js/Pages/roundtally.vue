@@ -47,9 +47,15 @@
             <!-- Button to proceed to the next round (or prompt screen) -->
             <button
                 @click="nextImposterRound"
-                class="mt-6 rounded bg-blue-600 px-6 py-2 text-white hover:bg-blue-700"
+                :disabled="!buttonEnabled"
+                class="mt-6 rounded px-6 py-2 text-white transition-all"
+                :class="
+                    buttonEnabled
+                        ? 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-gray-400'
+                "
             >
-                Next Imposter Round
+                {{ buttonEnabled ? 'Next Imposter Round' : 'Loading...' }}
             </button>
         </div>
 
@@ -82,6 +88,8 @@ const fetchGameCode = async () => {
     }
 };
 
+const isGameOver = ref(false);
+
 const fetchRoundTally = async () => {
     try {
         const res = await axios.get(`/api/games/${gameId}/imposter-tally`);
@@ -94,13 +102,20 @@ const fetchRoundTally = async () => {
 };
 
 const nextImposterRound = () => {
-    // Redirect to the prompt screen using window.location.href
-    window.location.href = `/promptscreen?gameId=${gameId}`;
+    if (isGameOver.value) {
+        window.location.href = '/finalresult?gameId=${gameId}';
+    } else {
+        window.location.href = '/promptscreen?gameId=${gameId}';
+    }
 };
 
+const buttonEnabled = ref(false);
 onMounted(async () => {
     await fetchGameCode();
     await fetchRoundTally();
+    setTimeout(() => {
+        buttonEnabled.value = true;
+    }, 3000);
 });
 </script>
 
