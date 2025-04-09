@@ -7,7 +7,7 @@
 
   <div class="flex space-x-4">
     <div v-for="response in responses" :key="response.id" class="rounded-sm  p-2">
-      {{ response.player?.name }} ->{{ response.raised_hand ? '✋' : '' }}
+      {{ response.player?.name }} ->{{ response.raised_hand ? '✋' : '✊' }}
     </div>      
   </div>
  </div>
@@ -45,7 +45,7 @@
       const currentGameId = ref(null); //replaced later
       const currentPlayerId = ref(null); //replaced later
       const responses = ref([]); //responses from the previous screen so they can vote on them
-      const timeLeft = ref(120); // 120 seconds timer
+      const timeLeft = ref(60); // 60 seconds timer
       const prompt = localStorage.getItem("prompt"); // get the prompt from local storage
       console.log("Prompt:", prompt);
 

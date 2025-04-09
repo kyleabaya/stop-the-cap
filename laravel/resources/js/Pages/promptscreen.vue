@@ -50,7 +50,7 @@
 <script>
 import axios from "axios";
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router"; 
+import { router } from "@inertiajs/vue3"
 
 export default {
   setup() {
@@ -60,7 +60,6 @@ export default {
     const gameCode = ref(localStorage.getItem("gameCode"));
     const player_id = ref(localStorage.getItem("player_id"));
     const game_round = ref({}); // Store game round
-    const router = useRouter();
     const isImposter = ref(false);
     const hasResponded = ref(false); // Store if player has responded
 
@@ -130,7 +129,6 @@ export default {
                 player_id: player_id.value,
                 raised_hand: false
               });
-            promptResponse.value = false; // Clear input after submission
             hasResponded.value = true;
             console.log("response submitted:", response.data);
         } catch (error) {
@@ -171,6 +169,7 @@ export default {
 }
     setInterval(() => fetchResponses(gameID), 5000);
     setInterval(() => checkIfAllResponded(), 5000);
+
     onMounted(() => {
       fetchLatestRound(); 
       fetchPrompt();
