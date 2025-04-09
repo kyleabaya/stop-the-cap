@@ -1,4 +1,11 @@
 <template>
+  <button 
+  class="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-xl shadow-lg hover:bg-gray-100 transition"
+  @click="goBack"
+>
+  ← Go Back
+</button>
+
     <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
         <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center text-2xl font-bold">
         <h2 class = "text-3xl">Code to join the lobby:</h2>
@@ -19,6 +26,11 @@
           Generate New Game
         </button>
         <button 
+          @click="joinGame"
+          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
+          Join the Game
+        </button>
+        <button 
           @click="startGame"
           class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
           Start Game
@@ -31,6 +43,7 @@
 <script>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import { router } from "@inertiajs/vue3"
 
 export default {
   setup() {
@@ -55,9 +68,17 @@ export default {
       }
     };
 
+    const goBack = async () => {
+      router.visit('/');
+    }
+
     const fetchLatestGame = async () => {
         latestGame.value = await axios.get("/api/latest-game-return-game");
     };
+
+    const joinGame= async () => {
+      router.visit('/joinlobby')
+    }
 
     // Function to start the game
     const startGame = () => {
@@ -81,7 +102,7 @@ export default {
       fetchPlayers();
     });
 
-    return {gameCode, players, startGame, latestGame, generateNewCode, game_id };
+    return {gameCode, players, startGame, latestGame, generateNewCode, game_id, joinGame, goBack };
   },
 };
 </script>
