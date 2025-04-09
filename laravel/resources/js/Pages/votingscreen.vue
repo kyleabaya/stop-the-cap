@@ -53,6 +53,7 @@
       const gameID = ref(localStorage.getItem("game_id"));
       const playerID = ref(localStorage.getItem("player_id"));
       const game_round = ref(1);
+
   
       const getPlayers = async () => {
         try {

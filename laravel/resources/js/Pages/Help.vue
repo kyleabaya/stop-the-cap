@@ -1,4 +1,7 @@
 <template>
+    <a href="/"   class="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-xl shadow-lg hover:bg-gray-100 transition"
+    > ← Go Back </a>
+
     <div class="text-black bg-[url(https://png.pngtree.com/background/20211217/original/pngtree-hand-drawn-minimal-background-besgin-picture-image_1598457.jpg')] bg-cover">
         <div class = "m-20 font-bold font-sans text-2xl">
         <h1>How to Play the Game & Get Started</h1>

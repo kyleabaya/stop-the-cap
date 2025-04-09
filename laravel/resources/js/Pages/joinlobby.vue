@@ -1,10 +1,6 @@
 <template>
-   <button 
-  class="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-xl shadow-lg hover:bg-gray-100 transition"
-  @click="goBack"
->
-  ← Go Back
-</button>
+     <a href="/"   class="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-xl shadow-lg hover:bg-gray-100 transition"
+    > ← Go Back </a>
 
     <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
       <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center">
