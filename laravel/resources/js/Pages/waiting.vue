@@ -70,7 +70,7 @@ export default {
         }
       };
 
-      setInterval(() => checkPhase, 2000);
+    setInterval(() => checkPhase(), 2000);
 
     onMounted(async () => {
       await fetchLatestGame();

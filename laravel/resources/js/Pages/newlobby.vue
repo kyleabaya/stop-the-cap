@@ -63,7 +63,7 @@ export default {
         console.error("problem fetching:", error);
       }
     };
-    
+
     const fetchLatestGame = async () => {
         latestGame.value = await axios.get("/api/latest-game-return-game");
     };
@@ -86,6 +86,8 @@ export default {
     const generateNewCode = () => {
         axios.post("/api/new-game"); // generate a new game code
         fetchPlayers(); // fetch players again to update the list
+        fetchLatestGame();
+
     }
     // run fetchPlayers() after component loads
     onMounted(() => {
