@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Round;
 use App\Models\Vote;
+use App\Models\Player;
 
 
 class VoteController extends Controller
@@ -64,4 +65,21 @@ class VoteController extends Controller
 
         $result = ['voted_suspect_id'=>$votedOutSuspectId, 'vote_count'=>$voteCount];
     }
+
+
+    public function postImposterTally($gameId)
+    {
+        $game = Game::with('players')->findOrFail($gameId);
+
+        $latestRound = $game->rounds()->latest()->first();
+        if ($latestRound && $latestRound->status !== 'completed') {
+            return response()->json(['error' => 'Latest round not completed'], 400);
+        }
+
+        return response()->json([
+            'message' => 'Tally after imposter caught',
+            'players' => $game->players()->select('id', 'name', 'points', 'is_imposter')->get()
+        ]);
+    }
+
 }
