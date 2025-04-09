@@ -97,22 +97,6 @@ export default {
 
     //move all players from waiting when the phase is changed
 
-    const checkPhase = async () => {
-        try {
-          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-          if (response.data.phase === "prompt_recieved") {
-            console.log("prompt recieved");
-          } else {
-            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
-            router.visit('/promptscreen');
-          }
-        } catch (error) {
-          console.error("Error checking phase:", error);
-        }
-      };
-
-    setInterval(checkPhase(), 2000);
-
     // Fetch latest game code and players when the component loads
     onMounted(() => {
       fetchLatestGame(); 

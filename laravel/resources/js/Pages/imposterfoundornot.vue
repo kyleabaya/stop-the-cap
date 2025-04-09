@@ -71,7 +71,7 @@
           if (response.data.phase === "voting") {
             console.log("In voting phase");
           } else {
-            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
+            //axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
             router.visit('/imposterfoundornot');
           }
         } catch (error) {

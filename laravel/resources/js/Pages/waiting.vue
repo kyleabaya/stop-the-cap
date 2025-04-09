@@ -22,12 +22,16 @@
 <script>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { router } from "@inertiajs/vue3";
 
 export default {
 
   setup() {
     const gameCode = ref('');  // Store game code input
     const players = ref([]); 
+    const gameID = ref(localStorage.getItem("game_id"));
+    const game_round = ref(1);
+
 
     const fetchLatestGame = async () => {
   try {
@@ -50,14 +54,31 @@ export default {
       }
     };
 
+    const checkPhase = async () => {
+        try {
+          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
+          if (response.data.phase === "prompt_recieved") {
+            console.log("prompt recieved");
+          } else {
+            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
+            router.visit('/promptscreen');
+          }
+        } catch (error) {
+          console.error("Error checking phase:", error);
+        }
+      };
+
+      setInterval(() => checkPhase, 2000);
+
     onMounted(async () => {
       await fetchLatestGame();
       console.log("Game Code after fetch:", gameCode.value); // This should log after the data is fetched
       getPlayers();
       setInterval(getPlayers, 5000);
+      checkPhase();
 });
 
-    return { gameCode, players };
+    return { gameCode, players, gameID, checkPhase };
 }
 };
 </script>
