@@ -6,7 +6,7 @@
         <div class="relative z-10 flex flex-col items-center justify-center space-y-6 text-black text-center">
           <h2 class="text-4xl font-extrabold md:text-6xl">
             <span v-if="isImposterFound" class="text-amber-400">The Capper</span>
-            <span v-else class="text-red-500">The Capper Was Not Found! 👀</span>
+            <span v-else>The Capper Was Not Found! 👀 </span>
           </h2>
           <p class="text-lg font-semibold">
             <span v-if="isImposterFound">Revealed! It was <span class="font-bold">{{ imposter.name }}</span>!</span>
@@ -14,7 +14,7 @@
           </p>
           <button
             @click="goToNextRound"
-            class="bg-green-300 text-black font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-green-400 transform hover:scale-110"
+            class="bg-green-300 text-black text-3xl font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-green-400 transform hover:scale-110"
           >
           Continue to Next Round
           </button>

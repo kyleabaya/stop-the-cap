@@ -1,7 +1,7 @@
 <template>
     <div class="h-screen flex items-center justify-center bg-red-600 text-white text-center">
       <div class="animate-fade-in">
-        <h1 class="text-6xl font-bold mb-4 animate-pulse">You Are the Imposter!</h1>
+        <h1 class="text-6xl font-bold mb-4 animate-pulse">You Are the Capper!</h1>
         <p class="text-xl">Stay hidden... Redirecting in {{ countdown }} seconds...</p>
       </div>
     </div>
