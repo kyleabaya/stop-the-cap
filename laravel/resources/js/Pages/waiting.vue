@@ -37,7 +37,9 @@ export default {
   try {
     const response = await axios.get("/api/latest-game");
     gameCode.value = response.data.code; 
+    //gameID.value = response.data.id;
     console.log("Fetched Game Code:", gameCode.value); 
+    console.log("fetched game id:", gameID.value);
   } catch (error) {
     console.error("Error fetching latest game:", error);
   }
@@ -72,7 +74,7 @@ export default {
 
     onMounted(async () => {
       await fetchLatestGame();
-      console.log("Game Code after fetch:", gameCode.value); // This should log after the data is fetched
+      console.log("Game ID after fetch:", gameID.value); // This should log after the data is fetched
       getPlayers();
       setInterval(getPlayers, 5000);
       checkPhase();

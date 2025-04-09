@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex flex-col justify-center items-center bg-[url('https://png.pngtree.com/background/20210717/original/pngtree-minimalist-dreamland-tennis-club-picture-image_1439360.jpg')] bg-cover bg-no-repeat bg-center">
         <div v-if="isImposter">
-    <h2 class="text-6xl font-bold mb-4 text-gray-800" >You are the imposter, blend in!</h2>
+    <h2 class="text-6xl font-bold mb-4 text-gray-800" >You are the Capper, blend in!</h2>
   </div>
   <div v-else>
       <h1 class="text-5xl font-bold mb-4 text-gray-800 items-center justify-center">Prompt:</h1>

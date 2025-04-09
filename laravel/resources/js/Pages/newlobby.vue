@@ -39,6 +39,7 @@ export default {
     const latestGame = ref(null);
     localStorage.setItem("game_code", gameCode);
     const game_id = ref(localStorage.getItem("game_id"));
+    console.log("current game_id value; ", game_id.value);
 
     // Fetch players from backend
     const fetchPlayers = async () => {
@@ -65,7 +66,7 @@ export default {
       axios.post(`/api/rounds/${plainGame.id}/start-round`, {game: plainGame}); // start the the round. First phase is Lobby
       axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, { game_id: latestGame.value.data.id } ); 
       // move to next phase of round
-      console.log("Game and Round started with ID:", latestGame.value);
+      console.log("Game and Round started with ID:", latestGame.value.data.id);
       //window.location.href = "/waiting"; // redirect to waiting screen
     };
 
