@@ -95,6 +95,24 @@ export default {
       const response = await axios.post("/api/new-game");
       gameCode.value = response.data.game_code; // Set game code from API response};
 
+    //move all players from waiting when the phase is changed
+
+    const checkPhase = async () => {
+        try {
+          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
+          if (response.data.phase === "voting") {
+            console.log("In voting phase");
+          } else {
+            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
+            router.visit('/imposterfoundornot');
+          }
+        } catch (error) {
+          console.error("Error checking phase:", error);
+        }
+      };
+
+    setInterval(checkPhase(), 2000);
+
     // Fetch latest game code and players when the component loads
     onMounted(() => {
       fetchLatestGame(); 

@@ -3,7 +3,7 @@
         <div class = "m-20 font-bold font-sans text-2xl">
         <h1>How to Play the Game & Get Started</h1>
         <div class = "bg-blue-200 p-6 rounded-xl shadow-lg w-0.8rem text-center">
-            <h2>🌟 Getting Started</h2> 
+            <h2>Getting Started</h2> 
                 <p>
                 Create a Lobby
                 Click the "Start New Lobby" button to generate a unique game code.
@@ -12,7 +12,7 @@
                 If you have a game code, enter it in the "Join Lobby" section.
                 Wait for the game to begin once all players are ready.
                 </p>
-                <h2>🎮How to Play</h2> 
+                <h2>How to Play</h2> 
                 <p>
                 Each round, players will be given a unique prompt.
                 Your goal is to blend in with the group by answering to the best of your ability (or lying if you are the imposter).

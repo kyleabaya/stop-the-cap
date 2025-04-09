@@ -36,7 +36,6 @@ class PlayerController extends Controller
     
     public function join(Request $request)
     {
-        // Validate the incoming request
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'code' => 'required|string',

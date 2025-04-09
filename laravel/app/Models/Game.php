@@ -31,7 +31,6 @@ class Game extends Model
         return $this->hasMany(Message::class);
     }
 
-    // Example method to check if game is finished
     public function isCompleted()
     {
         return $this->status === 'completed';

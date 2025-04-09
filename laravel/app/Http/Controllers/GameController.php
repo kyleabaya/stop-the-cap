@@ -44,31 +44,21 @@ class GameController extends Controller
             return response()->json(['error' => 'Failed to create game'], 500);
         }
      }
-    // Handle updating the points
+    // handle updating the points
     public function awardPoints(Request $request)
     {
         $userId = $request->user()->id;
         $points = $request->input('points');
-
-        // Find or create a player record
         $player = Player::firstOrCreate(['user_id' => $userId]);
-
-        // Increment the points for each player
         $player->increment('points', $points);
 
         return response()->json(['message' => 'Points awarded!', 'new_points' => $player->points]);
     }
 
-    //Handle the round turns
-
     public function nextRound(Request $request)
     {
         $userId = $request->user()->id;
-
-        // Find or create a player record
         $player = Player::firstOrCreate(['user_id' => $userId]);
-
-        // Increment the round for each player
         $player->increment('rounds');
 
         return response()->json(['message' => 'Round incremented!', 'new_rounds' => $player->rounds]);
