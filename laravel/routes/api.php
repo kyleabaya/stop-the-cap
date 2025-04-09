@@ -61,3 +61,5 @@ Route::get('/rounds/{game_id}/reset-or-continue-imposter', [RoundController::cla
 //imposter
 Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealImposter']);
 Route::post('game/{game_id}/assign-imposter', [RoundController::class, 'assignImposter']);
+
+Route::get('/games/{game}/imposter-tally', [VoteController::class, 'postImposterTally']);

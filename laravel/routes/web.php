@@ -39,9 +39,20 @@ Route::get('/joinlobby', function () {
     return Inertia::render('joinlobby');
 });
 
+Route::get('/roundtally', function () {
+    return Inertia::render('roundtally');
+});
+
+
+Route::get('/finalresult', function () {
+    return Inertia::render('finalresult');
+});
+
+
 Route::get('/promptscreen', function () {
     return Inertia::render('promptscreen');
 });
+
 
 Route::get('/waiting', function () {
     return Inertia::render('waiting');
