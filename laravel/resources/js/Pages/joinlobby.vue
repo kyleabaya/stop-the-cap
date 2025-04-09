@@ -100,11 +100,11 @@ export default {
     const checkPhase = async () => {
         try {
           const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-          if (response.data.phase === "voting") {
-            console.log("In voting phase");
+          if (response.data.phase === "prompt_recieved") {
+            console.log("prompt recieved");
           } else {
             axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
-            router.visit('/imposterfoundornot');
+            router.visit('/promptscreen');
           }
         } catch (error) {
           console.error("Error checking phase:", error);
