@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Models\Round;
 use App\Models\Player;
+use App\Models\Prompt;
 use Illuminate\Support\Facades\Log;
 
 
@@ -28,7 +29,7 @@ class RoundController extends Controller
             $imposterRoundCount = $lastRound ? $lastRound->imposter_round_count + 1 : 1;
         }
 
-        $prompt = \App\Models\Prompt::inRandomOrder()->first();
+        $prompt = Prompt::inRandomOrder()->first();
 
         $roundNumber = $game->rounds()->count() +1;
 
@@ -39,7 +40,6 @@ class RoundController extends Controller
             'prompt_id' => $prompt->id,
             'status' => 'in_progress', 
             'phases' => 'lobby',]);
-        
         
         return response()->json($round);
     }

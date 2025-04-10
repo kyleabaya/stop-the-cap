@@ -16,7 +16,7 @@
             @click="goToNextRound"
             class="bg-green-300 text-black text-3xl font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-green-400 transform hover:scale-110"
           >
-          Continue to Next Round
+          try to find the imposter again
           </button>
         </div>
       </div>
@@ -62,7 +62,7 @@
         //also increment the round number that imposter is on, if it is already at 3 rounds, then set it to zero and then start the round. 
         console.log('Game ID:', gameID.value);
         await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`); 
-        router.visit('/promptscreen');
+        router.visit('/promptscreen'); // goes to promptscreen if the imposter is not caught
       }
   
       const checkPhase = async () => {
