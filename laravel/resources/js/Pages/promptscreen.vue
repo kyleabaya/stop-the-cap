@@ -79,6 +79,10 @@ export default {
         const game_round = ref({});
         const isImposter = ref(false);
         const hasResponded = ref(false);
+
+        let interval; 
+
+        // Countdown state
         const timeLeft = ref(12);
         let transitioned = false;
 
@@ -117,7 +121,11 @@ export default {
 
         const submitTrue = async () => {
             try {
+
+                await fetchLatestRound()
+                console.log('Player ID:', player_id.value);
                 const res = await axios.post(
+                
                     `/api/responses/${game_round.value.id}/store`,
                     {
                         player_id: player_id.value,
@@ -133,7 +141,11 @@ export default {
 
         const submitFalse = async () => {
             try {
+
+                await fetchLatestRound()
+                console.log('Player ID:', player_id.value);
                 const res = await axios.post(
+
                     `/api/responses/${game_round.value.id}/store`,
                     {
                         player_id: player_id.value,
@@ -146,6 +158,7 @@ export default {
                 console.error('Error submitting false response:', error);
             }
         };
+
 
         const checkIfAllResponded = async () => {
             try {
@@ -186,6 +199,7 @@ export default {
             checkIfAllResponded();
             startCountdown();
             pollInterval = setInterval(() => checkIfAllResponded(), 5000);
+
         });
 
         onUnmounted(() => {

@@ -58,6 +58,7 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     setup() {
+
         const players = ref([]);
         const hasVoted = ref(false);
         const gameCode = ref(null);
@@ -65,6 +66,7 @@ export default {
         const playerID = ref(localStorage.getItem('player_id'));
         // Use the unique round id instead of the round number.
         const game_round = ref(null);
+        let interval; 
 
         const getPlayers = async () => {
             try {
@@ -78,6 +80,7 @@ export default {
                 console.error('Error fetching players:', error);
             }
         };
+
 
         const fetchLatestRound = async () => {
             try {
@@ -121,6 +124,7 @@ export default {
             }
         };
 
+
         const checkAllVoted = async () => {
             try {
                 const res = await axios.get(
@@ -135,6 +139,7 @@ export default {
             }
         };
 
+
         const pollingInterval = setInterval(() => {
             checkAllVoted();
         }, 2000);
@@ -148,6 +153,7 @@ export default {
 
         onUnmounted(() => {
             clearInterval(pollingInterval);
+
         });
 
         return { players, voteForPlayer, hasVoted, gameCode, game_round };

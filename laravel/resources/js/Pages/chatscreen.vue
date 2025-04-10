@@ -52,6 +52,7 @@
             </button>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -61,6 +62,7 @@ import { router } from '@inertiajs/vue3';
 import { onBeforeRouteLeave } from 'vue-router';
 
 export default {
+
     setup() {
         const messages = ref([]);
         const newMessage = ref('');
@@ -126,6 +128,7 @@ export default {
             const response = await axios.post('/api/messages/send', {
                 content: newMessage.value,
                 game_id: currentGameId.value,
+
                 player_id: currentPlayerId.value,
             });
             if (response.data.success) {
@@ -176,6 +179,7 @@ export default {
             currentGameId,
             prompt,
         };
+
     },
 };
 </script>
