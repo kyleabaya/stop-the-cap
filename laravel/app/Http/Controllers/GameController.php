@@ -126,12 +126,12 @@ class GameController extends Controller
         $players = $game->players; 
         $votes = Vote::where('game_id', $game_id)->get();
 
-        $voteCounts = $votes->groupBy('voted_for_player_id')->map->count();
-        $mostVotedPlayerId = $voteCounts->keys()->max();
+        $voteCounts = $votes->groupBy('suspect_id')->map->count();
+        $mostVotedPlayerId = $voteCounts->sortDesc()->keys()->first();
 
         // Find the imposter player
         $imposter = $players->firstWhere('is_imposter', true);
-        $isImposterRevealed = ($mostVotedPlayerId == $imposter->id);
+        $isImposterRevealed = $imposter && $mostVotedPlayerId == $imposter->id;
 
         return response()->json([
             'is_imposter_revealed' => $isImposterRevealed,
