@@ -107,7 +107,8 @@
         const allVoted = res.data.all_voted; 
         console.log("Voting status:", res.data);
         if (res.data.all_voted) {
-          axios.post(`api/rounds/${gameID.value}/nextPhase`); // next phase should be next_round so end
+          const res = axios.post(`api/rounds/${gameID.value}/next-phase`); // next phase should be next_round so end
+          console.log("moving on to the next phase (should be next Round):"(await res).data.phases);
           router.visit("/imposterfoundornot");
         }
     };

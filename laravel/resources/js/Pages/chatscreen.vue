@@ -68,7 +68,8 @@
           timeLeft.value--;
         } else {
           clearInterval(timer);
-          axios.post(`api/rounds/${gameID.value}/nextPhase`); //go to next phase which is response
+          const res = axios.post(`api/rounds/${gameID.value}/next-phase`); //go to next phase which is response
+          console.log("changing phase to next phase ->> response:", res.data.phases)
           router.visit('/votingscreen');
         }
       }, 1000);

@@ -98,8 +98,8 @@ class GameController extends Controller
             return response()->json(['error' => 'Round not found.'], 404);
         }
 
-        $responseIds = Response::where('round_id', $round->id)
-            ->pluck('player_id')
+        $responseIds = Vote::where('round_id', $round->id)
+            ->pluck('voter_id')
             ->unique()
             ->toArray();
 

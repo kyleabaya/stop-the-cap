@@ -203,7 +203,7 @@ export default {
         try {
         const res = await axios.get(`/api/games/${gameID.value}/rounds/${game_round.value.id}/has-everyone-responded`);
         if (res.data.all_responded) {
-          axios.post(`api/rounds/${gameID.value}/nextPhase`);  //move to next phase which is chat
+          axios.post(`api/rounds/${gameID.value}/next-phase`);//move to next phase which is chat
           router.visit('/chatscreen');
         } else {
           console.log("Waiting for more responses");
