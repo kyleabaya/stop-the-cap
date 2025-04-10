@@ -41,9 +41,9 @@ class VoteController extends Controller
         $imposterCaught = ($votedOutSuspectId == $round->imposter_id);
         
         //point system
-        $pointsCorrectVote = 100;
-        $pointsforCorrectVoteIfCaught = 200;
-        $pointsforImposterIfNotCaught = 300;
+        $pointsIfNotCaught = 100;
+        $pointsIfCaught = 200;
+        $pointsForImposterIfNotCaught = 300;
 
         foreach ($votes as $vote) {
             if ($vote->suspect_id == $round->imposter_id) {

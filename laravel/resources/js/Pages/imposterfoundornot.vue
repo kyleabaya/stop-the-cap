@@ -57,29 +57,22 @@
         }
       }
 
+
       const goToNextRound = async () => {        
         // start the next round. First phase is Lobby so change it to Prompt phase 
         //also increment the round number that imposter is on, if it is already at 3 rounds, then set it to zero and then start the round. 
         console.log('Game ID:', gameID.value);
-        await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`); 
-        router.visit('/promptscreen'); // goes to promptscreen if the imposter is not caught
+         const res = await axios.get(`api/rounds/${gameID.value}/reset-or-continue-imposter`);
+         if (res.data.newRound){
+          router.visit('/roundtally');
+         }
+         else if (res.data.gameOver){
+          router.visit('/finalresult');
+         } else{
+        router.visit('/promptscreen'); 
+         }// goes to promptscreen if the imposter is not caught
       }
   
-      const checkPhase = async () => {
-        try {
-          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-          if (response.data.phase === "voting") {
-            console.log("In voting phase");
-          } else {
-            const res = axios.post(`api/rounds/${gameID.value}/next-phase`); // move to next phase and then refirect
-            console.log("changing phase to next phase ->> next round", (await res).data.phases);
-
-            router.visit('/imposterfoundornot');
-          }
-        } catch (error) {
-          console.error("Error checking phase:", error);
-        }
-      };
 
       setTimeout(() => {
         revealImposter(); 
