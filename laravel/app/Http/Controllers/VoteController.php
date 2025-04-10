@@ -76,10 +76,7 @@ class VoteController extends Controller
         $game = Game::with('players')->findOrFail($gameId);
 
         $latestRound = $game->rounds()->latest()->first();
-        if ($latestRound && $latestRound->status !== 'completed') {
-            return response()->json(['error' => 'Latest round not completed'], 400);
-        }
-
+ 
         return response()->json([
             'message' => 'Tally after imposter caught',
             'players' => $game->players()->select('id', 'name', 'points', 'is_imposter')->get(),

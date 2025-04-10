@@ -1,4 +1,5 @@
 <template>
+<<<<<<< Updated upstream
     <div
         class="flex h-screen w-full items-center justify-center bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 p-6"
     >
@@ -34,6 +35,27 @@
                     Try to find the imposter again
                 </button>
             </div>
+=======
+    <div class="w-full h-screen bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-6">
+      <!-- The reveal Section -->
+      <div v-if="isRevealed" class="w-full max-w-4xl p-6 bg-white rounded-xl shadow-xl relative overflow-hidden">
+        <div class="absolute inset-0 bg-gray opacity-50"></div>
+        <div class="relative z-10 flex flex-col items-center justify-center space-y-6 text-black text-center">
+          <h2 class="text-4xl font-extrabold md:text-6xl">
+            <span v-if="isImposterFound" class="text-amber-400">The Capper</span>
+            <span v-else>The Capper Was Not Found! 👀 </span>
+          </h2>
+          <p class="text-lg font-semibold">
+            <span v-if="isImposterFound">Revealed! It was <span class="font-bold">{{ imposter.name }}</span>!</span>
+            <span v-else class = "text-3xl">No one could identify the Capper...</span>
+          </p>
+          <button
+            @click="checkIfPressed"
+            class="bg-green-300 text-black text-3xl font-semibold px-8 py-4 rounded-full transition-all duration-300 hover:bg-green-400 transform hover:scale-110"
+          >
+          try to find the imposter again
+          </button>
+>>>>>>> Stashed changes
         </div>
 
         <!-- Revealing State -->
@@ -62,11 +84,21 @@ import { router } from '@inertiajs/vue3';
 
 export default {
     setup() {
+<<<<<<< Updated upstream
         const gameID = ref(localStorage.getItem('game_id'));
         console.log('Game ID:', gameID.value);
         const isRevealed = ref(false);
         const isImposterFound = ref(false);
         const imposter = ref(null);
+=======
+      const gameID = ref(localStorage.getItem("game_id"));
+      console.log("Game ID:", gameID.value);
+      const isRevealed = ref(false);
+      const isImposterFound = ref(false);
+      const imposter = ref(null);
+      const alreadyPressed = ref(false);
+      console.log("already pressed", alreadyPressed.value);
+>>>>>>> Stashed changes
 
         const revealImposter = async () => {
             try {
@@ -83,7 +115,22 @@ export default {
             }
         };
 
+<<<<<<< Updated upstream
          const goToNextRound = async () => {        
+=======
+      const checkIfPressed= async () => {
+          if (alreadyPressed === true) {
+            console.log("second person to press")
+            router.visit('/promptscreen');
+          } else {
+            console.log("first person to press")
+            alreadyPressed.value = true;
+            goToNextRound();
+          }
+      };
+
+      const goToNextRound = async () => {        
+>>>>>>> Stashed changes
         // start the next round. First phase is Lobby so change it to Prompt phase 
         //also increment the round number that imposter is on, if it is already at 3 rounds, then set it to zero and then start the round. 
         console.log('Game ID:', gameID.value);
@@ -98,6 +145,7 @@ export default {
          }// goes to promptscreen if the imposter is not caught
       }
 
+<<<<<<< Updated upstream
         // Automatically reveal the imposter after a short delay
         setTimeout(() => {
             revealImposter();
@@ -114,6 +162,17 @@ export default {
             imposter,
             goToNextRound,
         };
+=======
+      setTimeout(() => {
+        revealImposter(); 
+      }, 1000);
+      
+    onMounted(() => {
+      
+    });
+  
+      return { revealImposter, isRevealed, isImposterFound, imposter, goToNextRound, checkIfPressed };
+>>>>>>> Stashed changes
     },
 };
 </script>
