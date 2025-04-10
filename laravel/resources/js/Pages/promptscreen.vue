@@ -56,12 +56,6 @@
             </h2>
             <p class="text-xl">Wait for the other players to respond.</p>
         </div>
-
-        <div
-            class="fixed right-4 top-4 rounded-lg bg-yellow-400 px-4 py-2 text-black shadow-lg"
-        >
-            <p class="text-lg font-bold">Time Left: {{ timeLeft }}</p>
-        </div>
     </div>
 </template>
 
@@ -117,6 +111,7 @@ export default {
 
         const submitTrue = async () => {
             try {
+                fetchRoundAndPrompt();
                 const res = await axios.post(
                     `/api/responses/${game_round.value.id}/store`,
                     {
@@ -133,6 +128,7 @@ export default {
 
         const submitFalse = async () => {
             try {
+                fetchRoundAndPrompt();
                 const res = await axios.post(
                     `/api/responses/${game_round.value.id}/store`,
                     {
@@ -163,20 +159,6 @@ export default {
             }
         };
 
-        const startCountdown = () => {
-            const timer = setInterval(async () => {
-                if (timeLeft.value > 0) {
-                    timeLeft.value--;
-                } else {
-                    clearInterval(timer);
-                    if (!hasResponded.value) {
-                        console.log('Auto-submitting response as false.');
-                        await submitFalse();
-                    }
-                    router.visit('/chatscreen');
-                }
-            }, 1000);
-        };
 
         let pollInterval;
 
@@ -184,7 +166,7 @@ export default {
             fetchRoundAndPrompt();
             checkIfPlayerIsImposter();
             checkIfAllResponded();
-            startCountdown();
+            //startCountdown();
             pollInterval = setInterval(() => checkIfAllResponded(), 5000);
         });
 

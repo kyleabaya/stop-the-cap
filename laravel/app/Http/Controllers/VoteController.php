@@ -45,6 +45,7 @@ class VoteController extends Controller
         $pointsIfCaught = 200;
         $pointsforImposterIfNotCaught = 300;
 
+
         foreach ($votes as $vote) {
             if ($vote->suspect_id == $round->imposter_id) {
                 $vote->voter->increment('points', $imposterCaught ? $pointsIfCaught : $pointsIfNotCaught);

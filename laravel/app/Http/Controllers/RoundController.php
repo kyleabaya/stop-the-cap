@@ -40,7 +40,6 @@ class RoundController extends Controller
             'status' => 'in_progress', 
             'phases' => 'lobby',]);
         
-        
         return response()->json($round->load('prompt'));
     }
 
@@ -90,8 +89,9 @@ class RoundController extends Controller
     public function resetOrContinueImposterRound(Request $request)
 {
     $game_id = (int) $request->route('game_id');
-
     $game = Game::with('players')->findOrFail($game_id);
+    $prompt = \App\Models\Prompt::inRandomOrder()->first();
+
 
     $latestRound = Round::where('game_id', $game->id)
         ->orderByDesc('created_at')
@@ -124,7 +124,8 @@ class RoundController extends Controller
         if ($game->imposters_remaining <= 0) {
             return response()->json([
                 'message' => 'No imposters remaining. Game is OVER.',
-                'game_id' => $game->id
+                'game_id' => $game->id,
+                'gameOver' => true,
             ]);
         }
         //if there are imposters remaining, decrement the imposters_remaining
@@ -135,12 +136,16 @@ class RoundController extends Controller
             'round_number' => $latestRound->round_number + 1,
             'imposter_id' => $newImposter->id,
             'imposter_round_count' => 1,
+            'prompt' => $prompt,
+            'prompt_id' =>$prompt->id,
         ]);
 
         return response()->json([
             'message' => 'Imposter changed. New round started. Also decremented # of imposters remaining',
             'new_round' => $newRound,
             'new_imposter' => $newImposter,
+            'prompt_id' =>$prompt->id,
+            'newRound' => true,
         ]);
     }
 
@@ -151,12 +156,15 @@ class RoundController extends Controller
         'round_number' => $latestRound->round_number + 1, //new round number
         'imposter_id' => $currentImposter->id, //keep the same imposter
         'imposter_round_count' => $latestRound->imposter_round_count +1, // increment imposter round count
+        'prompt_id' =>$prompt->id,
+
     ]);
 
     return response()->json([
         'message' => 'Same imposter, game continues to next round of that imposter.',
         'new_round' => $newRound,
         'updated_round' => $latestRound,
+        'prompt_id' =>$prompt->id,
     ]);
 }
 };
