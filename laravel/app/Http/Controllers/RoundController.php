@@ -41,7 +41,10 @@ class RoundController extends Controller
             'status' => 'in_progress', 
             'phases' => 'lobby',]);
         
-        return response()->json($round);
+
+        
+        return response()->json($round->load('prompt'));
+
     }
 
     private function assignImposter(Game $game){

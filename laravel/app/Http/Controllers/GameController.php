@@ -86,32 +86,38 @@ class GameController extends Controller
 
     //check to see if everyone has voted 
     public function hasEveryoneVoted($game_id, $round_id = null)
-    {
-        $game = Game::with('players')->findOrFail($game_id);
-        $playerIds = $game->players->pluck('id')->toArray();
+{
+    $game = Game::with('players')->findOrFail($game_id);
+    $playerIds = $game->players->pluck('id')->toArray();
 
-        $round = $round_id
-            ? $game->rounds()->where('id', $round_id)->first()
-            : $game->rounds()->latest()->first();
+    // Get the current round using the given round_id or the latest round.
+    $round = $round_id 
+        ? $game->rounds()->where('id', $round_id)->first() 
+        : $game->rounds()->latest()->first();
 
-        if (!$round) {
-            return response()->json(['error' => 'Round not found.'], 404);
-        }
-
-        $responseIds = Vote::where('round_id', $round->id)
-            ->pluck('voter_id')
-            ->unique()
-            ->toArray();
-
-        $allVoted = collect($playerIds)->every(fn($id) => in_array($id, $responseIds));
-
-        return response()->json([
-            'all_voted' => $allVoted,
-            'round_id' => $round->id,
-            'voted_ids' => $responseIds,
-            'expected_ids' => $playerIds,
-        ]);
+    if (!$round) {
+        return response()->json(['error' => 'Round not found.'], 404);
     }
+
+    // Use the Vote model now (instead of Response) to count votes.
+    $voterIds = \App\Models\Vote::where('round_id', $round->id)
+                      ->pluck('voter_id')
+                      ->unique()
+                      ->toArray();
+
+    // Check if every player's ID is in the voterIds array.
+    $allVoted = collect($playerIds)->every(function ($id) use ($voterIds) {
+        return in_array($id, $voterIds);
+    });
+
+    return response()->json([
+        'all_voted'   => $allVoted,
+        'round_id'    => $round->id,
+        'voted_ids'   => $voterIds,
+        'expected_ids'=> $playerIds,
+    ]);
+}
+
 
 
     public function revealImposter($game_id)
