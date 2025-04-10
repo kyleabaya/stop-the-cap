@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Game;
 use App\Models\Round;
 use App\Models\Player;
-use App\Models\Prompt;
 use Illuminate\Support\Facades\Log;
 
 
@@ -29,7 +28,7 @@ class RoundController extends Controller
             $imposterRoundCount = $lastRound ? $lastRound->imposter_round_count + 1 : 1;
         }
 
-        $prompt = Prompt::inRandomOrder()->first();
+        $prompt = \App\Models\Prompt::inRandomOrder()->first();
 
         $roundNumber = $game->rounds()->count() +1;
 
@@ -41,10 +40,8 @@ class RoundController extends Controller
             'status' => 'in_progress', 
             'phases' => 'lobby',]);
         
-
         
         return response()->json($round->load('prompt'));
-
     }
 
     private function assignImposter(Game $game){
@@ -107,7 +104,11 @@ class RoundController extends Controller
     $currentImposter = Player::where('game_id', $game->id)
         ->where('is_imposter', true)
         ->first();
-        
+
+    if (!$currentImposter) {
+        return response()->json(['error' => 'No imposter assigned in this game.'], 404);
+    }
+
     if ($latestRound->imposter_round_count > 3) {
         $currentImposter->is_imposter = false; 
         $currentImposter->save();
@@ -159,3 +160,4 @@ class RoundController extends Controller
     ]);
 }
 };
+
