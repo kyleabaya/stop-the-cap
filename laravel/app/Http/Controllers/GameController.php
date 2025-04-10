@@ -9,6 +9,7 @@ use App\Models\Game;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 use App\Models\Vote;
+use App\Models\Response;
 
 
 class GameController extends Controller
@@ -82,6 +83,36 @@ class GameController extends Controller
             'round' => $round,
         ]);
     }
+
+    //check to see if everyone has voted 
+    public function hasEveryoneVoted($game_id, $round_id = null)
+    {
+        $game = Game::with('players')->findOrFail($game_id);
+        $playerIds = $game->players->pluck('id')->toArray();
+
+        $round = $round_id
+            ? $game->rounds()->where('id', $round_id)->first()
+            : $game->rounds()->latest()->first();
+
+        if (!$round) {
+            return response()->json(['error' => 'Round not found.'], 404);
+        }
+
+        $responseIds = Response::where('round_id', $round->id)
+            ->pluck('player_id')
+            ->unique()
+            ->toArray();
+
+        $allVoted = collect($playerIds)->every(fn($id) => in_array($id, $responseIds));
+
+        return response()->json([
+            'all_voted' => $allVoted,
+            'round_id' => $round->id,
+            'voted_ids' => $responseIds,
+            'expected_ids' => $playerIds,
+        ]);
+    }
+
 
     public function revealImposter($game_id)
     {

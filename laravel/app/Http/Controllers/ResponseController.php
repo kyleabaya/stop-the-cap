@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Response;
 use App\Models\Round;
+use App\Models\Game;
 use Illuminate\Support\Facades\Log;
 
 class ResponseController extends Controller
@@ -45,4 +46,33 @@ class ResponseController extends Controller
 
         return response()->json($responses);
     }
+
+    public function hasEveryoneResponded($game_id, $round_id)
+{
+    $game = Game::with('players')->findOrFail($game_id);
+    $round = Round::where('id', $round_id)->where('game_id', $game_id)->firstOrFail();
+
+    $expectedIds = $game->players->pluck('id')->toArray();
+
+    $responses = Response::where('round_id', $round->id)
+        ->pluck('player_id')
+        ->unique()
+        ->toArray();
+
+    $allResponded = collect($expectedIds)->every(fn($id) => in_array($id, $responses));
+
+    $responsePayload = [ // So that the response can be returned before reset and deleted
+        'all_responded' => $allResponded,
+        'expected_players' => $expectedIds,
+        'responded_players' => $responses,
+        'round_id' => $round->id,
+    ];
+
+    if ($allResponded) {
+        // Delete all responses for this round after building response payload
+        Response::where('round_id', $round->id)->delete();
+    }
+
+    return response()->json($responsePayload);
+}
 }

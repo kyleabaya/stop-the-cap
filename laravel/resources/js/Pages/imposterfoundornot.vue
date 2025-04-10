@@ -78,11 +78,13 @@
           console.error("Error checking phase:", error);
         }
       };
-      
-    onMounted(() => {
+
       setTimeout(() => {
         revealImposter(); 
-      }, 2000); 
+      }, 1000);
+      
+    onMounted(() => {
+      
     });
   
       return { revealImposter, isRevealed, isImposterFound, imposter, goToNextRound };

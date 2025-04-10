@@ -228,6 +228,18 @@ export default {
                 console.error('Error checking responses:', error);
             }
         };
+    const checkIfAllResponded = async () => {
+    try {
+    const res = await axios.get(`/api/games/${gameID.value}/rounds/${game_round.value.id}/has-everyone-responded`);
+    if (res.data.all_responded) {
+      router.visit('/chatscreen');
+    } else {
+      console.log("Waiting for more responses");
+    } 
+  } catch (error) {
+    console.error("Failed to check responses:", error);
+  }
+};
 
         // Start polling and countdown on component mount
         onMounted(() => {

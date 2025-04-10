@@ -36,6 +36,7 @@
   <script>
   import axios from "axios";
   import { ref, onMounted } from "vue";
+  import { router } from "@inertiajs/vue3"
   
   export default {
     setup() {
@@ -59,9 +60,6 @@
         console.log("Current Player Name:", playerName);
 
     };
-    const redirect = async () =>{
-          window.location.href = "/votingscreen"; 
-        };
 
     const startCountdown = async () =>{
       const timer = setInterval(() => {
@@ -69,7 +67,7 @@
           timeLeft.value--;
         } else {
           clearInterval(timer);
-          redirect();
+          router.visit('/votingscreen');
         }
       }, 1000);
     };
@@ -131,7 +129,6 @@
         await fetchGameId();
         fetchMessages();
         fetchResponses();
-        
         
       });
   

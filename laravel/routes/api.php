@@ -46,10 +46,14 @@ Route::post('/prompts', [PromptController::class, 'store']);
 //response
 Route::post('/responses/{round}/store', [ResponseController::class, 'store']);
 Route::get('/responses/{game_id}', [ResponseController::class, 'getResponses']);
+Route::get('/games/{game_id}/rounds/{round_id}/has-everyone-responded', [ResponseController::class, 'hasEveryoneResponded']);
+
 
 //votes
 Route::post('/rounds/{round}/votes', [VoteController::class, 'store']);
 Route::post('/rounds/{round}/tally', [VoteController::class, 'tally']);
+Route::get('/games/{game_id}/has-everyone-voted/{round_id?}', [GameController::class, 'hasEveryoneVoted']);
+
 
 //rounds 
 Route::post('rounds/{game}/start-round', [RoundController::class, 'startRound']);

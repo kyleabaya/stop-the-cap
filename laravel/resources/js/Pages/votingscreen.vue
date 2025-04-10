@@ -5,7 +5,7 @@
   >
     <div class="bg-white/80 backdrop-blur-md rounded-2xl shadow-xl max-w-xl w-full p-8">
       <h1 class="text-3xl font-extrabold text-center text-blue-900 mb-6">
-        🕵️‍♀️ Who's Capping?
+        🕵️‍♀️ Who's Capping? 
       </h1>
 
       <div v-if="!hasVoted">
@@ -103,19 +103,22 @@
       };
 
       const checkAllVoted = async () => {
-          const router = useRouter();
-          const allVoted = players.every(player => player.has_voted === true);
-          if (allVoted) {
-            router.visit('/imposterfoundornot');
-          }
-        };
+        const res = await axios.get(`/api/games/${gameID.value}/has-everyone-voted/${game_round.value}`);        ;
+        const allVoted = res.data.all_voted; 
+        console.log("Voting status:", res.data);
+        if (res.data.all_voted) {
+          router.visit("/imposterfoundornot");
+        }
+    };
 
       const checkPhase = async () => {
         try {
           const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-          if (response.data.phase === "voting") {
+          game_round.value = response.data.id;
+          console.log("current phase:", response.data.phases);
+          if (response.data.phases === "voting") {
             console.log("In voting phase");
-          } else if (response.data.phase === "nextRound") {
+          } else if (response.data.phases === "nextRound") {
             axios.post(`api/rounds/nextPhase/${gameID}`); // move to next phase and then refirect
             router.visit('/imposterfoundornot');
           }
