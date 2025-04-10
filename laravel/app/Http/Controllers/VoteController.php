@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Round;
 use App\Models\Vote;
 use App\Models\Player;
+use App\Models\Game;
 
 
 class VoteController extends Controller

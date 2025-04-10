@@ -1,6 +1,8 @@
 <template>
     <div
-        class="to-indigo500 flex h-screen flex-col items-center justify-center bg-gradient-to-r from-indigo-500 via-red-500 p-4"
+        class="flex h-screen flex-col items-center justify-center p-4"
+        style=" background-size: cover; background-blend-mode: overlay; background-image: url('https://img.freepik.com/premium-vector/colorful-bright-confetti-pieces-isolated-white-background_166207-157.jpg');"
+
     >
         <div
             class="fade-in w-full max-w-lg rounded-lg bg-white p-8 text-center shadow-lg"

@@ -37,15 +37,19 @@ class ResponseController extends Controller
 
     public function getResponses($game_id)
     {
-        $responses = Response::whereHas('round', function ($query) use ($game_id) {
-            $query->where('game_id', $game_id);
-        })
-        ->with(['player:id,name', 'round'])
-        ->orderBy('created_at', 'asc')
-        ->get(['id', 'raised_hand', 'player_id', 'round_id', 'created_at']);
+        // Get the latest round for the given game_id
+        $latestRound = Round::where('game_id', $game_id)
+                            ->latest()
+                            ->first();
+
+        $responses = Response::where('round_id', $latestRound->id)
+                            ->with(['player:id,name', 'round'])
+                            ->orderBy('created_at', 'asc')
+                            ->get(['id', 'raised_hand', 'player_id', 'round_id', 'created_at']);
 
         return response()->json($responses);
     }
+
 
     public function hasEveryoneResponded($game_id, $round_id)
 {

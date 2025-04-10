@@ -20,7 +20,7 @@
  
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import axios from 'axios';
 import { router } from "@inertiajs/vue3";
 
@@ -62,7 +62,7 @@ export default {
           if (response.data.phase === "lobby") {
             console.log("in lobby");
           } else {
-            axios.post(`api/rounds/${gameID.value}/nextPhase`); // move to next phase and then refirect
+            axios.post(`api/rounds/${gameID.value}/next-phase`); // move to next phase and then refirect
             router.visit('/promptscreen');
           }
         } catch (error) {
@@ -70,7 +70,7 @@ export default {
         }
       };
 
-    setInterval(() => checkPhase(), 2000);
+    const interval = setInterval(() => checkPhase(), 2000);
 
     onMounted(async () => {
       await fetchLatestGame();
@@ -79,6 +79,10 @@ export default {
       setInterval(getPlayers, 5000);
       checkPhase();
 });
+
+    onUnmounted(() => {
+              clearInterval(interval);
+            });
 
     return { gameCode, players, gameID, checkPhase };
 }

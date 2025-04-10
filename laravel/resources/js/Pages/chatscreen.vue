@@ -37,7 +37,7 @@
   import axios from "axios";
   import { ref, onMounted, onUnmounted } from "vue";
   import { router } from "@inertiajs/vue3"
-  import { onBeforeRouteLeave } from 'vue-router';
+  //import { onBeforeRouteLeave } from 'vue';
 
   export default {
     setup() {
@@ -104,16 +104,14 @@
 
         if (response.data.success) {
           newMessage.value = ""; // Clear input
-          fetchNewMessages(); // Immediately show new message
+          fetchMessages(); // Immediately show new message
         }
       };
 
       //fetch responses to be displayed at the top of the screen
       const fetchResponses = async () => {
         try {
-          const response = await fetch(`/api/responses/${currentGameId.value}`);
-          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-          
+          const response = await fetch(`/api/responses/${currentGameId.value}`);          
           const data = await response.json();
           console.log("Responses fetched:", data);
           responses.value = data ?? [];
@@ -125,24 +123,18 @@
 
       const interval = setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
 
-
-    onBeforeRouteLeave(() => {
-      axios.delete(`/api/messages/cleanup/${gameID.value}`);
-    });
   
       onMounted(async () => {
         startCountdown();
         await fetchGameId();
         fetchMessages();
-        fetchResponses();
-        
+        fetchResponses();     
       });
 
       onUnmounted(async ()=>
     {
       clearInterval(interval);
-      axios.delete(`/api/messages/cleanup/${gameID.value}`).then(() => console.log("Messages cleaned up"))
-      .catch(err => console.error("Cleanup error:", err));;
+      axios.delete(`/api/messages/cleanup/${currentGameId.value}`).then(() => console.log("Messages cleaned up"));
     })
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };
