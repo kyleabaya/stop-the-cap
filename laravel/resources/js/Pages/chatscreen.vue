@@ -37,7 +37,8 @@
   import axios from "axios";
   import { ref, onMounted, onUnmounted } from "vue";
   import { router } from "@inertiajs/vue3"
-  
+  import { onBeforeRouteLeave } from 'vue-router';
+
   export default {
     setup() {
       const messages = ref([]);
@@ -124,6 +125,11 @@
 
       const interval = setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
 
+
+    onBeforeRouteLeave(() => {
+      axios.delete(`/api/messages/cleanup/${gameID.value}`);
+    });
+  
       onMounted(async () => {
         startCountdown();
         await fetchGameId();
@@ -135,7 +141,8 @@
       onUnmounted(async ()=>
     {
       clearInterval(interval);
-
+      axios.delete(`/api/messages/cleanup/${gameID.value}`).then(() => console.log("Messages cleaned up"))
+      .catch(err => console.error("Cleanup error:", err));;
     })
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };

@@ -12,20 +12,18 @@ class MessageController extends Controller
 {
     // Fetch all messages
     public function fetchMessages($game_id)
-    {
-        $timeLimit = Carbon::now()->subMinutes(5);
-
-        // delete all messages older than 5 minutes for the specific game_id
-        Message::where('game_id', $game_id)
-               ->where('created_at', '<', $timeLimit)
-               ->delete();
-        
-               
+    {   
         $messages = Message::where('game_id', $game_id)
         ->with('player') 
         ->orderBy('created_at', 'asc')
         ->get();
         return response()->json($messages);
+    }
+
+    public function cleanup($game_id)
+    {
+        Message::where('game_id', $game_id)->delete();
+        return response()->json(['message' => 'Messages deleted.']);
     }
 
     // Fetch only new messages after a given timestamp

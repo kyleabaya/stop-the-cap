@@ -33,6 +33,7 @@ Route::get('getPlayer/{player_id}', [PlayerController::class, 'getPlayer']);
 Route::get('/messages/{game_id}', [MessageController::class, 'fetchMessages']);
 Route::post('/messages/new', [MessageController::class, 'fetchNewMessages']);
 Route::post('/messages/send', [MessageController::class, 'sendMessage']);
+Route::delete('/messages/cleanup/{game_id}', [MessageController::class, 'cleanup']);
 
 //prompt receiving
 
