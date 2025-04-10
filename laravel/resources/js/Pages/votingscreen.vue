@@ -68,8 +68,8 @@
 
     const fetchLatestRound = async () => {
       const res = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-      console.log("Latest round data:", res.data);
-      game_round.value = res.data.round_number;
+      console.log("Latest round data:", res.data.id);
+      game_round.value = res.data.id;
       console.log("Round", game_round.value);
     };
 
@@ -107,26 +107,12 @@
         const allVoted = res.data.all_voted; 
         console.log("Voting status:", res.data);
         if (res.data.all_voted) {
+          axios.post(`api/rounds/${gameID.value}/nextPhase`); // next phase should be next_round so end
           router.visit("/imposterfoundornot");
         }
     };
 
-      // const checkPhase = async () => {
-      //   try {
-      //     const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-      //     game_round.value = response.data.id;
-      //     console.log("current phase:", response.data.phases);
-      //     if (response.data.phases === "voting") {
-      //       console.log("In voting phase");
-      //     } else if (response.data.phases === "nextRound") {
-      //       axios.post(`api/rounds/nextPhase/${gameID}`); // move to next phase and then refirect
-      //       router.visit('/imposterfoundornot');
-      //     }
-      //   } catch (error) {
-      //     console.error("Error", error);
-      //   }
-      // };
-      
+    
     // setInterval(() => checkPhase(), 2000);
     const interval = setInterval(() => checkAllVoted(), 2000);
 

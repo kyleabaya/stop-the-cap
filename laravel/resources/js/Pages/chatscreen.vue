@@ -37,7 +37,7 @@
   import axios from "axios";
   import { ref, onMounted, onUnmounted } from "vue";
   import { router } from "@inertiajs/vue3"
-  import { onBeforeRouteLeave } from 'vue-router';
+  //import { onBeforeRouteLeave } from 'vue';
 
   export default {
     setup() {
@@ -68,6 +68,7 @@
           timeLeft.value--;
         } else {
           clearInterval(timer);
+          axios.post(`api/rounds/${gameID.value}/nextPhase`); //go to next phase which is response
           router.visit('/votingscreen');
         }
       }, 1000);
@@ -125,10 +126,6 @@
 
       const interval = setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
 
-
-    onBeforeRouteLeave(() => {
-      axios.delete(`/api/messages/cleanup/${gameID.value}`);
-    });
   
       onMounted(async () => {
         startCountdown();

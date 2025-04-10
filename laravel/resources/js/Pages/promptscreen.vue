@@ -199,39 +199,11 @@ export default {
             }
         };
 
-        // Check if all players have responded by comparing response count to player count
-        // const checkIfAllResponded = async () => {
-        //     try {
-        //         const [playersRes, responsesRes] = await Promise.all([
-        //             axios.get(`/api/games/${gameID.value}/players`),
-        //             axios.get(`/api/responses/${gameID.value}`),
-        //         ]);
-
-        //         console.log('Players fetched:', playersRes.data.players);
-        //         console.log('Responses fetched:', responsesRes.data);
-
-        //         allPlayers.value = playersRes.data.players;
-        //         allResponses.value = responsesRes.data;
-
-        //         const respondedIDs = new Set(
-        //             allResponses.value.map((r) => r.player_id),
-        //         );
-        //         const everyoneResponded = allPlayers.value.every((player) =>
-        //             respondedIDs.has(player.id),
-        //         );
-        //         console.log('All players responded:', everyoneResponded);
-        //         if (everyoneResponded && !transitioned) {
-        //             transitioned = true; // Avoid multiple navigations
-        //             router.visit('/chatscreen');
-        //         }
-        //     } catch (error) {
-        //         console.error('Error checking responses:', error);
-        //     }
-        // };
-        const checkIfAllResponded = async () => {
+    const checkIfAllResponded = async () => {
         try {
         const res = await axios.get(`/api/games/${gameID.value}/rounds/${game_round.value.id}/has-everyone-responded`);
         if (res.data.all_responded) {
+          axios.post(`api/rounds/${gameID.value}/nextPhase`);  //move to next phase which is chat
           router.visit('/chatscreen');
         } else {
           console.log("Waiting for more responses");
