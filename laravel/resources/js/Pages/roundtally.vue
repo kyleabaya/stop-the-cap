@@ -3,9 +3,7 @@
         class="flex h-screen flex-col items-center justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-4"
     >
         <!-- Heading -->
-        <h1 class="mb-8 text-5xl font-bold text-black">
-            Round Tally
-        </h1>
+        <h1 class="mb-8 text-5xl font-bold text-black">Round Tally</h1>
 
         <!-- Results Card -->
         <div
@@ -28,10 +26,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr
-                        v-for="player in players"
-                        :key="player.id"
-                    >
+                    <tr v-for="player in players" :key="player.id">
                         <td class="border px-4 py-2">
                             {{ player.name }}
                             <span v-if="player.is_imposter" class="text-red-500"
@@ -93,7 +88,9 @@ const isGameOver = ref(false);
 
 const fetchRoundTally = async () => {
     try {
-        const res = await axios.get(`/api/games/${gameId.value}/imposter-tally`);
+        const res = await axios.get(
+            `/api/games/${gameId.value}/imposter-tally`,
+        );
         tallyMessage.value = res.data.message;
         players.value = res.data.players || [];
     } catch (error) {

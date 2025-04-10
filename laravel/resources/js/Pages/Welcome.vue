@@ -47,7 +47,7 @@ function handleImageError() {
         >
             <div class="relative w-full px-6 lg:max-w-7xl">
                 <header
-                    class="grid grid-cols-2 items-right gap-0 py-16 text-4xl font-bold"
+                    class="items-right grid grid-cols-2 gap-0 py-16 text-4xl font-bold"
                 >
                     Welcome to Stop The Cap!
                 </header>
@@ -71,7 +71,7 @@ function handleImageError() {
                                     invite your friends to join you.
                                 </p>
                             </div>
-                              <svg
+                            <svg
                                 class="size-6 shrink-0 self-center stroke-[#FF2D20]"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -147,12 +147,11 @@ function handleImageError() {
 
 <script>
 export default {
-
-setup() {
-generateNewCode = () => {
-        axios.post("/api/new-game"); // generate a new game code
-        fetchPlayers(); // fetch players again to update the list
-    }
-}
+    setup() {
+        generateNewCode = () => {
+            axios.post('/api/new-game'); // generate a new game code
+            fetchPlayers();
+        };
+    },
 };
-    </script>
+</script>

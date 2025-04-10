@@ -16,7 +16,6 @@
 
         <div v-if="!hasResponded">
             <div class="flex space-x-4 pt-10">
-                <!-- No Button -->
                 <div
                     class="relative mb-5 pr-8 transition-transform hover:scale-[1.25] lg:w-[130px]"
                 >
@@ -32,7 +31,6 @@
                     <p>click the x for no</p>
                 </div>
 
-                <!-- Yes Button -->
                 <div
                     class="relative mb-5 pl-8 transition-transform hover:scale-[1.25] lg:w-[130px]"
                 >
@@ -158,7 +156,6 @@ export default {
                 console.error('Failed to check if all responded:', error);
             }
         };
-
 
         let pollInterval;
 

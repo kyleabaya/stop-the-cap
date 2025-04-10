@@ -1,102 +1,129 @@
 <template>
-    <a href="/"   class="absolute top-4 left-4 bg-white text-sm px-3 py-1 rounded-xl shadow-lg hover:bg-gray-100 transition"
-    > ← Go Back </a>
+    <a
+        href="/"
+        class="absolute left-4 top-4 rounded-xl bg-white px-3 py-1 text-sm shadow-lg transition hover:bg-gray-100"
+    >
+        ← Go Back
+    </a>
 
-    <div class="min-h-screen flex flex-col justify-center items-center bg-gradient-to-r from-pink-200 to-blue-100">
-        <div class="bg-white p-8 rounded-xl shadow-lg w-96 text-center text-2xl font-bold">
-        <h2 class = "text-3xl">Code to join the lobby:</h2>
-        <div class = "text-6xl" v-if="gameCode && gameCode !== ''">{{ gameCode }}</div>
-        <div v-else>No game code available</div>
-        
-        <div class="players-list"></div>
-            <h2 class = "text-xl">Players in Lobby:</h2>
+    <div
+        class="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-pink-200 to-blue-100"
+    >
+        <div
+            class="w-96 rounded-xl bg-white p-8 text-center text-2xl font-bold shadow-lg"
+        >
+            <h2 class="text-3xl">Code to join the lobby:</h2>
+            <div class="text-6xl" v-if="gameCode && gameCode !== ''">
+                {{ gameCode }}
+            </div>
+            <div v-else>No game code available</div>
+
+            <div class="players-list"></div>
+            <h2 class="text-xl">Players in Lobby:</h2>
             <ul>
                 <li v-for="player in players" :key="player.id">
-                    {{player.name}}
+                    {{ player.name }}
                 </li>
             </ul>
-        
-        <button 
-          @click="generateNewCode"
-          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
-          Generate New Game
-        </button>
-        <button 
-          @click="joinGame"
-          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
-          Join the Game
-        </button>
-        <button 
-          @click="startGame"
-          class="mt-6 px-6 py-3 text-xl font-semibold bg-green-500 text-white rounded-lg shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300">
-          Start Game
-        </button>
+
+            <button
+                @click="generateNewCode"
+                class="mt-6 rounded-lg bg-green-500 px-6 py-3 text-xl font-semibold text-white shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300"
+            >
+                Generate New Game
+            </button>
+            <button
+                @click="joinGame"
+                class="mt-6 rounded-lg bg-green-500 px-6 py-3 text-xl font-semibold text-white shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300"
+            >
+                Join the Game
+            </button>
+            <button
+                @click="startGame"
+                class="mt-6 rounded-lg bg-green-500 px-6 py-3 text-xl font-semibold text-white shadow-md transition hover:bg-green-700 focus:ring-4 focus:ring-green-300"
+            >
+                Start Game
+            </button>
+        </div>
     </div>
-    
-    </div> 
 </template>
 
 <script>
-import axios from "axios";
-import { ref, onMounted } from "vue";
-import { router } from "@inertiajs/vue3"
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 export default {
-  setup() {
-    const players = ref([]);  // players list (empty at first)
-    const gameCode = ref("");  // game code (empty at first)
-    const latestGame = ref(null);
-    localStorage.setItem("game_code", gameCode);
-    const game_id = ref(localStorage.getItem("game_id"));
-    console.log("current game_id value; ", game_id.value);
+    setup() {
+        const players = ref([]); // players list (empty at first)
+        const gameCode = ref('');
+        const latestGame = ref(null);
+        localStorage.setItem('game_code', gameCode);
+        const game_id = ref(localStorage.getItem('game_id'));
+        console.log('current game_id value; ', game_id.value);
 
-    // Fetch players from backend
-    const fetchPlayers = async () => {
-      try {
-        const response1 = await axios.get('/api/get-code');
-        gameCode.value = response1.data.code; // assign game code from response
+        // Fetch players from backend
+        const fetchPlayers = async () => {
+            try {
+                const response1 = await axios.get('/api/get-code');
+                gameCode.value = response1.data.code; // assign game code from response
 
-        const response2 =  await axios.get(`/api/getPlayers/${gameCode.value}`);
-        players.value = response2.data.players; //asign players from response
-      } 
-       catch (error) {
-        console.error("problem fetching:", error);
-      }
-    };
+                const response2 = await axios.get(
+                    `/api/getPlayers/${gameCode.value}`,
+                );
+                players.value = response2.data.players; //asign players from response
+            } catch (error) {
+                console.error('problem fetching:', error);
+            }
+        };
 
-    const fetchLatestGame = async () => {
-        latestGame.value = await axios.get("/api/latest-game-return-game");
-    };
+        const fetchLatestGame = async () => {
+            latestGame.value = await axios.get('/api/latest-game-return-game');
+        };
 
-    const joinGame= async () => {
-      router.visit('/joinlobby')
-    }
+        const joinGame = async () => {
+            router.visit('/joinlobby');
+        };
 
-    // Function to start the game
-    const startGame = () => {
-      console.log("Starting game with ID:", latestGame.value.data);
-      const plainGame = JSON.parse(JSON.stringify(latestGame.value.data)); //making the Proxy object a plain object
-      axios.post(`/api/rounds/${plainGame.id}/start-round`, {game: plainGame}); // start the the round. First phase is Lobby
-      axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, { game_id: latestGame.value.data.id } ); 
-      // move to next phase of round
-      console.log("Game and Round started with ID:", latestGame.value.data.id);
-      //window.location.href = "/waiting"; // redirect to waiting screen
-    };
+        // Function to start the game
+        const startGame = () => {
+            console.log('Starting game with ID:', latestGame.value.data);
+            const plainGame = JSON.parse(JSON.stringify(latestGame.value.data)); //making the Proxy object a plain object
+            axios.post(`/api/rounds/${plainGame.id}/start-round`, {
+                game: plainGame,
+            }); // start the the round. First phase is Lobby
+            axios.post(`/api/rounds/${latestGame.value.data.id}/next-phase`, {
+                game_id: latestGame.value.data.id,
+            });
+            // move to next phase of round
+            console.log(
+                'Game and Round started with ID:',
+                latestGame.value.data.id,
+            );
+            //window.location.href = "/waiting"; // redirect to waiting screen
+        };
 
-    const generateNewCode = () => {
-        axios.post("/api/new-game"); // generate a new game code
-        fetchPlayers(); // fetch players again to update the list
-        fetchLatestGame();
+        const generateNewCode = () => {
+            axios.post('/api/new-game'); // generate a new game code
+            fetchPlayers(); // fetch players again to update the list
+            fetchLatestGame();
+        };
+        // run fetchPlayers() after component loads
+        onMounted(() => {
+            fetchLatestGame();
+            //fetchLatestRound();
+            fetchPlayers();
+        });
 
-    }
-    // run fetchPlayers() after component loads
-    onMounted(() => {
-      fetchLatestGame();
-      //fetchLatestRound(); 
-      fetchPlayers();
-    });
-
-    return {gameCode, players, startGame, latestGame, generateNewCode, game_id, joinGame };
-  },
+        return {
+            gameCode,
+            players,
+            startGame,
+            latestGame,
+            generateNewCode,
+            game_id,
+            joinGame,
+        };
+    },
 };
 </script>

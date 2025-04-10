@@ -142,7 +142,6 @@ export default {
         onMounted(async () => {
             await fetchLatestRound();
             await getPlayers();
-            // Optionally, log players count for debugging:
             console.log('Players count:', players.value.length);
         });
 
