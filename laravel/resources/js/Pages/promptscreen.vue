@@ -72,7 +72,7 @@
 
 <script>
 import axios from 'axios';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { router } from '@inertiajs/vue3';
 
 export default {
@@ -240,16 +240,19 @@ export default {
         console.error("Failed to check responses:", error);
       }
      };
-
+       
         // Start polling and countdown on component mount
         onMounted(() => {
             fetchLatestRound();
             fetchPrompt();
             checkIfPlayerIsImposter();
             checkIfAllResponded();
-            startCountdown();
+            //startCountdown(); 
+            const interval = setInterval(() => checkIfAllResponded(), 5000);
+        });
 
-            setInterval(() => checkIfAllResponded(), 5000);
+        onUnmounted(() => {
+          clearInterval(interval)
         });
 
         return {

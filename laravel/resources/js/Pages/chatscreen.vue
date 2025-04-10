@@ -35,7 +35,7 @@
   
   <script>
   import axios from "axios";
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, onUnmounted } from "vue";
   import { router } from "@inertiajs/vue3"
   
   export default {
@@ -82,7 +82,7 @@
         lastMessageTime = response.data.length > 0 ? response.data[0].created_at : "";
       };
   
-      // Fetch new messages every 0.5 seconds
+     // Fetch new messages every 0.5 seconds
       // const fetchNewMessages = async () => {
       //   if (!lastMessageTime) return;
       //   const response = await axios.post("/api/messages/new", { 
@@ -122,7 +122,7 @@
         }
       };
 
-      setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
+      const interval = setInterval(fetchMessages, 500); // Check for new messages every 0.5 seconds
 
       onMounted(async () => {
         startCountdown();
@@ -131,6 +131,12 @@
         fetchResponses();
         
       });
+
+      onUnmounted(async ()=>
+    {
+      clearInterval(interval);
+
+    })
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };
     },

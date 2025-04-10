@@ -19,6 +19,7 @@ class MessageController extends Controller
         Message::where('game_id', $game_id)
                ->where('created_at', '<', $timeLimit)
                ->delete();
+        
                
         $messages = Message::where('game_id', $game_id)
         ->with('player') 

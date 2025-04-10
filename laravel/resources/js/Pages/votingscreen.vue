@@ -41,7 +41,7 @@
 
   
   <script>
-  import { ref, onMounted } from "vue";
+  import { ref, onMounted, onUnmounted} from "vue";
   import axios from "axios";
   import { router } from "@inertiajs/vue3";
   
@@ -111,29 +111,33 @@
         }
     };
 
-      const checkPhase = async () => {
-        try {
-          const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
-          game_round.value = response.data.id;
-          console.log("current phase:", response.data.phases);
-          if (response.data.phases === "voting") {
-            console.log("In voting phase");
-          } else if (response.data.phases === "nextRound") {
-            axios.post(`api/rounds/nextPhase/${gameID}`); // move to next phase and then refirect
-            router.visit('/imposterfoundornot');
-          }
-        } catch (error) {
-          console.error("Error", error);
-        }
-      };
+      // const checkPhase = async () => {
+      //   try {
+      //     const response = await axios.get(`api/rounds/${gameID.value}/latest-round`);
+      //     game_round.value = response.data.id;
+      //     console.log("current phase:", response.data.phases);
+      //     if (response.data.phases === "voting") {
+      //       console.log("In voting phase");
+      //     } else if (response.data.phases === "nextRound") {
+      //       axios.post(`api/rounds/nextPhase/${gameID}`); // move to next phase and then refirect
+      //       router.visit('/imposterfoundornot');
+      //     }
+      //   } catch (error) {
+      //     console.error("Error", error);
+      //   }
+      // };
       
-    setInterval(() => checkPhase(), 2000);
-    setInterval(() => checkAllVoted(), 2000);
+    // setInterval(() => checkPhase(), 2000);
+    const interval = setInterval(() => checkAllVoted(), 2000);
 
     onMounted(async () => {
         await fetchLatestRound(); 
         getPlayers();        
       });
+    
+      onUnmounted(() => {
+          clearInterval(interval);
+        });
       return { players, voteForPlayer, hasVoted, gameCode, game_round };
     },
   };

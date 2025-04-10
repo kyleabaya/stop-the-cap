@@ -68,10 +68,10 @@ class ResponseController extends Controller
         'round_id' => $round->id,
     ];
 
-    if ($allResponded) {
-        // Delete all responses for this round after building response payload
-        Response::where('round_id', $round->id)->delete();
-    }
+    // if ($allResponded) {
+    //     sleep(10); 
+    //     Response::where('round_id', $round->id)->delete();
+    // }
 
     return response()->json($responsePayload);
 }
