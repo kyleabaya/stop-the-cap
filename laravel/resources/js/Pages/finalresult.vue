@@ -37,7 +37,6 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
-// Extract the gameId from URL query parameters using URLSearchParams
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get('gameId') || '';
 
@@ -56,7 +55,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-/* Optional fade-in animation for the card container */
 @keyframes fadeIn {
     from {
         opacity: 0;

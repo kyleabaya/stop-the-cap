@@ -107,7 +107,6 @@ export default {
                     voter_id: Number(playerID.value),
                     suspect_id: suspectplayerId,
                 });
-                // Await the vote submission to ensure it is recorded properly.
                 await axios.post(`/api/rounds/${game_round.value}/votes`, {
                     game_id: Number(gameID.value),
                     round_id: Number(game_round.value),

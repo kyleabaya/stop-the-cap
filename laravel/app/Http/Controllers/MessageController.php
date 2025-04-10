@@ -26,7 +26,7 @@ class MessageController extends Controller
         return response()->json(['message' => 'Messages deleted.']);
     }
 
-    // Fetch only new messages after a given timestamp
+    // fetch only new messages after a given timestamp
     public function fetchNewMessages(Request $request)
     {
         $lastMessageTime = $request->input('last_message_time');

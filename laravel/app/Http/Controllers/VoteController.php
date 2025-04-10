@@ -43,7 +43,7 @@ class VoteController extends Controller
         //point system
         $pointsIfNotCaught = 100;
         $pointsIfCaught = 200;
-        $pointsforImposterIfNotCaught = 300;
+        $pointsForImposterIfNotCaught = 300;
 
 
         foreach ($votes as $vote) {
