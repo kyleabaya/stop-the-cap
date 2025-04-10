@@ -104,11 +104,7 @@ class RoundController extends Controller
     $currentImposter = Player::where('game_id', $game->id)
         ->where('is_imposter', true)
         ->first();
-
-    if (!$currentImposter) {
-        return response()->json(['error' => 'No imposter assigned in this game.'], 404);
-    }
-
+        
     if ($latestRound->imposter_round_count > 3) {
         $currentImposter->is_imposter = false; 
         $currentImposter->save();

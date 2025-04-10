@@ -89,7 +89,7 @@ export default {
         // For polling/checking responses
         const allPlayers = ref([]);
         const allResponses = ref([]);
-        let transitioned = false; // Prevent multiple navigations
+        let interval; 
 
         // Countdown state
         const timeLeft = ref(12);
@@ -165,6 +165,7 @@ export default {
         // Submit a true (yes) response
         const submitTrue = async () => {
             try {
+                await fetchLatestRound()
                 console.log('Player ID:', player_id.value);
                 const response = await axios.post(
                     `/api/responses/${game_round.value.id}/store`,
@@ -184,6 +185,7 @@ export default {
         // Submit a false (no) response
         const submitFalse = async () => {
             try {
+                await fetchLatestRound()
                 console.log('Player ID:', player_id.value);
                 const response = await axios.post(
                     `/api/responses/${game_round.value.id}/store`,
@@ -203,6 +205,8 @@ export default {
         try {
         const res = await axios.get(`/api/games/${gameID.value}/rounds/${game_round.value.id}/has-everyone-responded`);
         if (res.data.all_responded) {
+            clearInterval(interval); //stop polling
+            console.log("✅ Everyone responded. Moving to chatscreen.");
           axios.post(`api/rounds/${gameID.value}/next-phase`);//move to next phase which is chat
           router.visit('/chatscreen');
         } else {
@@ -214,13 +218,12 @@ export default {
      };
        
         // Start polling and countdown on component mount
-        onMounted(() => {
-            fetchLatestRound();
-            fetchPrompt();
+        onMounted(async () => {
+            await fetchLatestRound();
             checkIfPlayerIsImposter();
-            checkIfAllResponded();
-            //startCountdown(); 
-            const interval = setInterval(() => checkIfAllResponded(), 5000);
+            await fetchPrompt();
+            checkIfAllResponded(); // now uses correct round
+            interval = setInterval(() => checkIfAllResponded(), 5000);
         });
 
         onUnmounted(() => {

@@ -53,6 +53,7 @@
       const gameID = ref(localStorage.getItem("game_id"));
       const playerID = ref(localStorage.getItem("player_id"));
       const game_round = ref(1);
+      let interval; 
 
   
       const getPlayers = async () => {
@@ -75,6 +76,7 @@
 
       const voteForPlayer = async (suspectplayerId) => {
         try {
+          await getPlayers();
           console.log("Voting for player ID:", suspectplayerId);
           console.log("Voting in Round:", game_round.value);
           if (!game_round.value) {
@@ -107,19 +109,20 @@
         const allVoted = res.data.all_voted; 
         console.log("Voting status:", res.data);
         if (res.data.all_voted) {
-          const res = axios.post(`api/rounds/${gameID.value}/next-phase`); // next phase should be next_round so end
-          console.log("moving on to the next phase (should be next Round):"(await res).data.phases);
+          clearInterval(interval); //stop polling
           router.visit("/imposterfoundornot");
         }
     };
 
     
     // setInterval(() => checkPhase(), 2000);
-    const interval = setInterval(() => checkAllVoted(), 2000);
+    
 
     onMounted(async () => {
         await fetchLatestRound(); 
-        getPlayers();        
+        getPlayers();
+        interval = setInterval(() => checkAllVoted(), 2000);
+        
       });
     
       onUnmounted(() => {

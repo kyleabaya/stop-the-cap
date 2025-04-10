@@ -68,6 +68,5 @@ Route::post('/game/{game_id}/reveal-imposter', [GameController::class, 'revealIm
 Route::post('game/{game_id}/assign-imposter', [RoundController::class, 'assignImposter']);
 
 Route::get('/games/{game}/imposter-tally', [VoteController::class, 'postImposterTally']);
-
 Route::get('/games/{game}/final-results', [GameController::class, 'finalResults']);
 

@@ -68,8 +68,6 @@
           timeLeft.value--;
         } else {
           clearInterval(timer);
-          const res = axios.post(`api/rounds/${gameID.value}/next-phase`); //go to next phase which is response
-          console.log("changing phase to next phase ->> response:", res.data.phases)
           router.visit('/votingscreen');
         }
       }, 1000);
@@ -106,16 +104,14 @@
 
         if (response.data.success) {
           newMessage.value = ""; // Clear input
-          fetchNewMessages(); // Immediately show new message
+          fetchMessages(); // Immediately show new message
         }
       };
 
       //fetch responses to be displayed at the top of the screen
       const fetchResponses = async () => {
         try {
-          const response = await fetch(`/api/responses/${currentGameId.value}`);
-          if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-          
+          const response = await fetch(`/api/responses/${currentGameId.value}`);          
           const data = await response.json();
           console.log("Responses fetched:", data);
           responses.value = data ?? [];
@@ -132,15 +128,13 @@
         startCountdown();
         await fetchGameId();
         fetchMessages();
-        fetchResponses();
-        
+        fetchResponses();     
       });
 
       onUnmounted(async ()=>
     {
       clearInterval(interval);
-      axios.delete(`/api/messages/cleanup/${gameID.value}`).then(() => console.log("Messages cleaned up"))
-      .catch(err => console.error("Cleanup error:", err));;
+      axios.delete(`/api/messages/cleanup/${currentGameId.value}`).then(() => console.log("Messages cleaned up"));
     })
   
       return { messages, newMessage, sendMessage, responses, timeLeft, currentPlayerId, currentGameId, prompt };
