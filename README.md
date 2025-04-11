@@ -1,14 +1,50 @@
 #STOP THE CAP!
 
-Instructions to Run:
+STOP THE CAP! is a multiplayer web game built with a Laravel backend and Vue frontend. 
 
-1. Make sure to open two terminals
-2. Change directory to Laravel directory for both terminals (cd laravel)
-3. Run this command on one terminal: npm run dev
-4. Run this command on the other terminal: php artisan serve -> then cmd+click on the server given.
-5. To test multiplayer, paste the server into separate search engines
-6. Click on Create Game
-7. Generate New Game
-8. Join Game with nickname and corresponding unique game code on both search engines
-9. Open up one more window then click on create game
-10. Start game (*this will start the game for the players in lobby)
+Instructions:
+Ensure you have the following installed on your computer:
+PHP 8. (and Composer)
+Node.js (and npm)
+Google Chrome/Safari
+Optionally, Herd
+Installation
+Install Composer Dependencies:
+Change directory to Laravel
+Execute this: composer install
+Install Node Dependencies: npm install
+Configure Environment Variables: cp .env.example .env
+Open the .env file and update:
+
+
+APP_URL=http://localhost:8000
+Connect your local database
+
+
+Generate Application Key: php artisan key:generate
+
+Run Migrations and Seed the Database:
+php artisan migrate --seed
+
+
+
+Running the Project
+To test locally, you must have two terminals open.
+Terminal 1: Run the Frontend Dev Server
+Change directory to laravel 
+Execute command: npm run dev
+Terminal 2: Run the Laravel Backend
+Change directory to laravel 
+Execute command: php artisan serve
+Cmd+click the server given
+
+
+Testing Multiplayer
+Required: Have multiple search engines open or incognito and regular windows.
+Copy this: http://127.0.0.1:8000
+
+
+>Click on Create Game
+>Click Generate New Game for Game Code
+>Copy the Code and Click on Join Game: Do this for all search engines in use
+>Have one extra window and navigate to Create Game, then click on Start Game
