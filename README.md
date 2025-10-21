@@ -1,54 +1,110 @@
-#STOP THE CAP!
+# Stop the Cap!
 
-STOP THE CAP! is a multiplayer web game built with a Laravel backend and Vue frontend. 
+Stop the Cap! is a multiplayer web game with a Laravel backend and a Vue.js frontend. This repository contains the full-stack code and project structure used to build and run the game locally.
 
 https://github.com/user-attachments/assets/cbf28cee-a823-466c-9345-4875cc47a1a5
 
+Key highlights
+- Full-stack project using Laravel (PHP) and Vue.js.
+- Demonstrates environment configuration, database migrations & seeding, frontend build tooling, and a local development workflow for testing multiplayer functionality.
+- Useful as a portfolio piece or resume project to show practical experience with modern web development tools.
 
+Tech stack
+- Backend: PHP 8+, Laravel
+- Frontend: Vue.js, npm
+- Tooling: Composer, npm, Laravel artisan
+- Browser: Google Chrome / Safari
+- Optional: Herd / Valet / other local dev helpers
 
-Instructions:
-Ensure you have the following installed on your computer:
-PHP 8. (and Composer)
-Node.js (and npm)
-Google Chrome/Safari
-Optionally, Herd
-Installation
-Install Composer Dependencies:
-Change directory to Laravel
-Execute this: composer install
-Install Node Dependencies: npm install
-Configure Environment Variables: cp .env.example .env
-Open the .env file and update:
+Prerequisites
+- PHP 8 or newer (and Composer)
+- Node.js and npm
+- A modern browser (Chrome, Safari, or Firefox)
+- A local database (MySQL, MariaDB, SQLite, etc.)
+- Optional: Herd or Laravel Valet for macOS
 
+Quick setup (local development)
+1. Clone the repository
+   - git clone <this-repo-url>
+   - cd stop-the-cap
 
-APP_URL=http://localhost:8000
-Connect your local database
+2. Install backend dependencies
+```bash
+cd laravel
+composer install
+```
 
+3. Install frontend dependencies
+```bash
+npm install
+```
 
-Generate Application Key: php artisan key:generate
+4. Environment setup
+```bash
+cp .env.example .env
+# Open .env and update database settings and APP_URL if needed, e.g.:
+# APP_URL=http://localhost:8000
+```
 
-Run Migrations and Seed the Database:
+5. Application key
+```bash
+php artisan key:generate
+```
+
+6. Database migrations & seeders
+```bash
 php artisan migrate --seed
+```
+This will create all necessary tables and seed example data used for testing the game.
 
+Run the app locally
+You will typically have two terminals running: one for the frontend dev server and one for the backend.
 
+Terminal 1 — Frontend (assets + hot reload)
+```bash
+cd laravel
+npm run dev
+```
 
-Running the Project
-To test locally, you must have two terminals open.
-Terminal 1: Run the Frontend Dev Server
-Change directory to laravel 
-Execute command: npm run dev
-Terminal 2: Run the Laravel Backend
-Change directory to laravel 
-Execute command: php artisan serve
-Cmd+click the server given
+Terminal 2 — Backend (Laravel HTTP server)
+```bash
+cd laravel
+php artisan serve
+```
+Note: php artisan serve prints the local URL (usually http://127.0.0.1:8000). Cmd/Ctrl+click that link to open the site.
 
+Multiplayer testing (local)
+- Open multiple browser windows or use a mix of regular and incognito windows to simulate multiple players.
+- Navigate to the app (e.g., http://127.0.0.1:8000).
+- Create a game:
+  - Click "Create Game".
+  - Click "Generate New Game" to get a game code.
+  - Share the game code and use it to "Join Game" from each test window.
+- Use one window to "Start Game" as the host once everyone has joined.
 
-Testing Multiplayer
-Required: Have multiple search engines open or incognito and regular windows.
-Copy this: http://127.0.0.1:8000
+Repository structure (high level)
+- laravel/ — backend Laravel application (controllers, migrations, seeders, routes)
+- (frontend components are inside the Laravel project under resources/js or a dedicated frontend folder depending on structure)
 
+Notes & troubleshooting
+- If using a different host/port, update APP_URL in .env to match.
+- Ensure database credentials in .env are correct before running migrations.
+- If assets don’t load after npm run dev, stop the dev server and restart it; check console for build errors.
+- If you prefer to use Herd/Valet, you can run the project using those tools instead of php artisan serve.
 
->Click on Create Game
->Click Generate New Game for Game Code
->Copy the Code and Click on Join Game: Do this for all search engines in use
->Have one extra window and navigate to Create Game, then click on Start Game
+Contribution
+- Open issues for bugs or feature requests.
+- Pull requests are welcome — please describe the change and include testing steps.
+
+License
+- If you want to add a license, include a LICENSE file (MIT is common for portfolio projects).
+
+Resume-ready bullets
+Use one or more of the following on your resume or portfolio:
+- Built a multiplayer web game using Laravel (PHP) and Vue.js; implemented environment setup, database migrations & seeding, and a local development workflow for multiplayer testing.
+- Managed full-stack project lifecycle: dependency management (Composer, npm), environment configuration, and automated database setup with migrations and seeders.
+- Demonstrated practical experience with frontend-backend integration, development servers, and multi-client testing for concurrent gameplay.
+
+Contact
+- Author: Kyle Abaya and Maya Leidler
+- GitHub: https://github.com/kyleabaya/stop-the-cap
