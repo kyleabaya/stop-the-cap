@@ -98,11 +98,6 @@ Contribution
 
 License
 - If you want to add a license, include a LICENSE file (MIT is common for portfolio projects).
-
-Resume-ready bullets
-Use one or more of the following on your resume or portfolio:
-- Built a multiplayer web game using Laravel (PHP) and Vue.js; implemented environment setup, database migrations & seeding, and a local development workflow for multiplayer testing.
-- Managed full-stack project lifecycle: dependency management (Composer, npm), environment configuration, and automated database setup with migrations and seeders.
 - Demonstrated practical experience with frontend-backend integration, development servers, and multi-client testing for concurrent gameplay.
 
 Contact
