@@ -7,7 +7,6 @@ https://github.com/user-attachments/assets/cbf28cee-a823-466c-9345-4875cc47a1a5
 Key highlights
 - Full-stack project using Laravel (PHP) and Vue.js.
 - Demonstrates environment configuration, database migrations & seeding, frontend build tooling, and a local development workflow for testing multiplayer functionality.
-- Useful as a portfolio piece or resume project to show practical experience with modern web development tools.
 
 Tech stack
 - Backend: PHP 8+, Laravel
